@@ -49,15 +49,6 @@ public class SwordMenuManager : MonoBehaviour
     {
         try 
         {
-            // Keyboard Support (New Input System)
-            if (Keyboard.current != null)
-            {
-                if (Keyboard.current.mKey.wasPressedThisFrame || Keyboard.current.spaceKey.wasPressedThisFrame)
-                {
-                    ToggleMenu(!_menuActive);
-                }
-            }
-
             // Meta Quest 3 / XR Controller Support
             if (InputSystem.devices.Count > 0)
             {

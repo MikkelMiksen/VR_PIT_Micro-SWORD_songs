@@ -63,26 +63,6 @@ public class SwordInteraction : MonoBehaviour
 
     void HandleInput()
     {
-        #if UNITY_EDITOR
-        if (Keyboard.current != null)
-        {
-            if (Keyboard.current.eKey.wasPressedThisFrame)
-            {
-                Transform hand = rightHand != null ? rightHand : (Camera.main != null ? Camera.main.transform : null);
-                if (hand != null) OnGripPressed(hand, false);
-            }
-            if (Keyboard.current.qKey.wasPressedThisFrame)
-            {
-                Transform hand = leftHand != null ? leftHand : (Camera.main != null ? Camera.main.transform : null);
-                if (hand != null) OnGripPressed(hand, true);
-            }
-            if (Keyboard.current.gKey.wasPressedThisFrame && _isEquipped)
-            {
-                Drop();
-            }
-        }
-        #endif
-
         if (InputSystem.devices.Count == 0) return;
 
         foreach (var device in InputSystem.devices)
