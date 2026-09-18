@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xsi:schemaLocation="UnityEngine.UIElements ../../UIElementsSchema/UIElements.xsd"
+>
+    <Style src="UIStyles.uss" />
+
+    <engine:VisualElement name="InventoryContainer" class="inventory-container">
+        <engine:Label text="Inventory" class="inventory-title" />
+        <engine:VisualElement name="SlotGrid" class="slot-grid">
+            <!-- Slots will be populated by script -->
+        </engine:VisualElement>
+        <engine:Button name="CloseButton" text="Close" class="close-button" />
+    </engine:VisualElement>
+</engine:UXML>

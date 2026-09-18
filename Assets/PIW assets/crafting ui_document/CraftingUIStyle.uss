@@ -1,0 +1,40 @@
+.crafting-panel {
+    width: 360px;
+    height: 250px;
+    padding: 15px;
+    margin: 10px;
+
+    background-color: #222;
+    border-radius: 10px;
+
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.crafting-title {
+    font-size: 20px;
+    unity-font-style: bold;
+    color: #fff;
+}
+
+.recipe-dropdown {
+    height: 28px;
+}
+
+.ingredients-label {
+    color: #ddd;
+}
+
+.craft-button {
+    height: 30px;
+    background-color: #445;
+    color: white;
+}
+
+.close-button {
+    width: 30px;
+    height: 25px;
+    align-self: flex-end;
+    background-color: #744;
+    color: white;
+}

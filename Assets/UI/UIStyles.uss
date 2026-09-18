@@ -1,0 +1,96 @@
+﻿.hud-container {
+    flex-direction: column;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+}
+
+.stat-bar-container {
+    margin-bottom: 10px;
+}
+
+.stat-label {
+    color: white;
+    font-size: 18px;
+    -unity-font-style: bold;
+}
+
+.stat-bar-bg {
+    height: 20px;
+    width: 200px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.stat-bar-fill {
+    height: 100%;
+    width: 100%;
+}
+
+.health-fill {
+    background-color: rgb(200, 50, 50);
+}
+
+.temp-fill {
+    background-color: rgb(50, 150, 200);
+}
+
+.time-panel {
+    margin-top: 10px;
+}
+
+.time-label {
+    color: white;
+    font-size: 24px;
+}
+
+.inventory-container {
+    width: 600px;
+    height: 500px;
+    background-color: rgba(30, 30, 30, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    align-items: center;
+}
+
+.inventory-title {
+    color: white;
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.slot-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+.inventory-slot {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 5px;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.slot-icon {
+    width: 100%;
+    height: 100%;
+}
+
+.slot-count {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    color: white;
+    font-size: 12px;
+}
+
+.close-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+}

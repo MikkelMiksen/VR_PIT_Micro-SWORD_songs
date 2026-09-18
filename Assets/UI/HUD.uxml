@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xsi:schemaLocation="UnityEngine.UIElements ../../UIElementsSchema/UIElements.xsd"
+>
+    <Style src="UIStyles.uss" />
+
+    <engine:VisualElement name="HUDContainer" class="hud-container">
+        <engine:VisualElement name="StatsPanel" class="stats-panel">
+            <engine:VisualElement name="HealthBarContainer" class="stat-bar-container">
+                <engine:Label text="HP" class="stat-label" />
+                <engine:VisualElement name="HealthBarBackground" class="stat-bar-bg">
+                    <engine:VisualElement name="HealthBarFill" class="stat-bar-fill health-fill" />
+                </engine:VisualElement>
+            </engine:VisualElement>
+            
+            <engine:VisualElement name="TempBarContainer" class="stat-bar-container">
+                <engine:Label name="TempLabel" text="37.0°C" class="stat-label" />
+                <engine:VisualElement name="TempBarBackground" class="stat-bar-bg">
+                    <engine:VisualElement name="TempBarFill" class="stat-bar-fill temp-fill" />
+                </engine:VisualElement>
+            </engine:VisualElement>
+        </engine:VisualElement>
+        
+        <engine:VisualElement name="TimePanel" class="time-panel">
+            <engine:Label name="TimeLabel" text="00:00" class="time-label" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>
