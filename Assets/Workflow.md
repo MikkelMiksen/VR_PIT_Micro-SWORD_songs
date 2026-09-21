@@ -10,23 +10,46 @@
    - Move `InventoryUI` and `CraftingUI` to World Space Canvases.
    - Attach `PointableCanvas` to allow interaction via Ray Interactor.
 
-#### Phase 2: Dynamic World Generation
-1. **Async Terrain**: 
-   - Optimize `DiamondSquareTerrainGeneration.cs` to run without blocking the main thread.
-   - Trigger generation via a Loading Screen.
-2. **Runtime Resource Spawning**:
-   - Create a `ResourceSpawner` that iterates through terrain coordinates.
-   - Use `SampleHeight` to place `WoodPile` and `CoalPile` prefabs.
-3. **NavMesh Baking**: 
-   - Attach a `NavMeshSurface` to the Terrain.
-   - Call `navMeshSurface.BuildNavMesh()` immediately after terrain and resource generation.
+#### Phase 2: Dynamic World Generation [COMPLETED]
+1. **Async Terrain**: [DONE]
+   - Optimized `DiamondSquareTerrainGeneration.cs` via `TerrainGeneratorManager.cs`.
+   - Generation runs on background thread via `Task.Run`.
+   - Added `_runGenerationOnStart` toggle to skip Diamond Square once terrain is ready.
+2. **Runtime Resource Spawning**: [DONE]
+   - Created `ResourceSpawner.cs` to place resources after terrain is ready.
+   - Uses `SampleHeight` for placement.
+3. **NavMesh Baking**: [DONE]
+   - Integrated `NavMeshSurface.BuildNavMesh()` into the generation sequence.
 
-#### Phase 3: Monster & Combat System
-1. **Combat Adaptation**: 
-   - Convert AR Sword data to use Meta Interaction SDK `Grabbable` with physics-based hits.
-2. **Monster Spawning Logic**:
-   - Hook into `DayNightCycle.cs` to trigger monster prefab spawning between 12am and 6am.
-   - Ensure monsters target the VR Player Rig using the runtime-baked NavMesh.
+#### Phase 3: Monster & Combat System [IN PROGRESS]
+1. **Combat Adaptation**: [IN PROGRESS]
+   - Converted AR Sword data to use Meta Interaction SDK `Grabbable` with physics-based hits.
+   - Added `Sword` to `ResourceType` and implemented tool cycling in `MJ_PlayerInventory`.
+   - *B* button triggers `CycleTools()` via `MJ_PlayerController`.
+2. **Monster Spawning Logic**: [DONE]
+   - Created `MonsterSpawner.cs` hooked into `DayNightCycle.cs`.
+   - Spawning occurs between 12am and 6am.
+   - Monsters target the VR Player Rig and respect the runtime-baked NavMesh.
+
+### Phase 4: Player temperature and hunger [IN PROGRESS]
+1. **Player Temperature**: [DONE]
+   - Using `MJ_BodyTemp.cs` attached to the VR Player Rig.
+   - Integrates with `DayNightCycle` and `Furnace`.
+2. **Furnace & Heating**:
+   - Heat functionality integrated with `DayNightCycle`.
+   - Clothing and Campfire pending.
+3. **Player Hunger**: [IN PROGRESS]
+   - Created `MJ_PlayerHunger.cs` for depletion and starvation damage.
+   - *Y* button triggers `CycleFood()` and basic eating logic.
+   - Cooking recipes and campfire cooking pending.
+
+### Phase 5: Building and construction
+1. **Building**:
+   - Two types should be buildable:
+   -  - crafting station types
+   -  - housing: Walls, floundations, rooftops, door.
+   - a grid based building system should be added.
+2.
 
 #### Phase 4: Optimization & Testing
 1. **Performance Profiling**: Use the Meta Quest Link Profiler to check CPU/GPU usage.

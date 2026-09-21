@@ -19,7 +19,6 @@ public class EnemyAI : MonoBehaviour
     private float _lastAttackTime;
 
     private Transform _player;
-    private ARSceneManager _arSceneManager;
     private Animator _animator;
     private EnemyStats _stats;
 
@@ -28,7 +27,6 @@ public class EnemyAI : MonoBehaviour
         if (Camera.main != null) _player = Camera.main.transform;
         else _player = FindFirstObjectByType<AudioListener>()?.transform;
 
-        _arSceneManager = FindFirstObjectByType<ARSceneManager>();
         _animator = GetComponent<Animator>();
         _stats = GetComponent<EnemyStats>();
         _lastAttackTime = -attackCooldown;
@@ -50,11 +48,13 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
+        /*
         if (ARGameManager.Instance != null && ARGameManager.Instance.currentState != GameState.Gameplay)
         {
             PlayAnimation("IdleBattle");
             return;
         }
+        */
 
         Vector3 flatPlayerPos = _player.position;
         if (!isFlying) flatPlayerPos.y = transform.position.y;

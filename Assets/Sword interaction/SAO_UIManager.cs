@@ -104,8 +104,10 @@ public class SAO_UIManager : MonoBehaviour
         {
             playButton.clicked += () =>
             {
+                /*
                 if (ARGameManager.Instance != null)
                     ARGameManager.Instance.StartGame();
+                */
             };
         }
     }

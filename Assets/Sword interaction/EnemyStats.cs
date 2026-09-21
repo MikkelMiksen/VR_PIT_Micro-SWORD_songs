@@ -68,6 +68,12 @@ public class EnemyStats : MonoBehaviour
         if (_isDying) return;
         _isDying = true;
 
+        MonsterSpawner spawner = FindFirstObjectByType<MonsterSpawner>();
+        if (spawner != null)
+        {
+            spawner.DecrementCount();
+        }
+
         Debug.Log($"[SAO] Enemy {gameObject.name} defeated!");
 
         // Disable colliders so it doesn't block attacks or movement

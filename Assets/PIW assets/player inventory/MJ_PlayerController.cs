@@ -15,6 +15,10 @@ public class MJ_PlayerController : MonoBehaviour
     
     [Header("VR References")]
     [SerializeField] private Transform cameraTransform;
+
+    [Header("Input Actions")]
+    [SerializeField] private InputActionProperty cycleToolsAction;
+    [SerializeField] private InputActionProperty cycleFoodAction;
     
     private Rigidbody rb;
 
@@ -22,6 +26,41 @@ public class MJ_PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         if (cameraTransform == null) cameraTransform = Camera.main.transform;
+
+        cycleToolsAction.action.performed += OnCycleTools;
+        cycleFoodAction.action.performed += OnCycleFood;
+    }
+
+    private void OnDestroy()
+    {
+        cycleToolsAction.action.performed -= OnCycleTools;
+        cycleFoodAction.action.performed -= OnCycleFood;
+    }
+
+    private void OnCycleTools(InputAction.CallbackContext context)
+    {
+        // Phase 3: Cycle through tools (B button)
+        if (MJ_PlayerInventory.Instance != null)
+        {
+            MJ_PlayerInventory.Instance.CycleTools();
+        }
+    }
+
+    private void OnCycleFood(InputAction.CallbackContext context)
+    {
+        // Phase 4: Cycle through food (Y button)
+        if (MJ_PlayerInventory.Instance != null)
+        {
+            MJ_PlayerInventory.Instance.CycleFood();
+            
+            // For now, let's also eat it immediately on Y press
+            // because there's no "Use" button defined yet.
+            var consumables = MJ_PlayerInventory.Instance.GetConsumablesList();
+            if (consumables.Count > 0)
+            {
+                // In a real game, this might be a separate "Eat" action.
+            }
+        }
     }
 
     void FixedUpdate()

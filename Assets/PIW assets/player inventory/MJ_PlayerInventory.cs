@@ -43,6 +43,7 @@ public class MJ_PlayerInventory : MonoBehaviour
         dieselSprite, rawMeatSprite,
         cookedMeatSprite, berriesSprite,
         stoneAxeSprite, stonePickaxeSprite,
+        swordSprite,
         crudeOilSprite;
 
     private int numOfInventorySlots = 88;
@@ -145,6 +146,90 @@ public class MJ_PlayerInventory : MonoBehaviour
         return list;
     }
 
+    [Header("Cycling References")]
+    [SerializeField] private Transform toolSpawnPoint;
+    [SerializeField] private List<ToolMapping> toolMappings = new List<ToolMapping>();
+    private GameObject currentToolInstance;
+    private int currentToolIndex = -1;
+    private int currentFoodIndex = -1;
+
+    [System.Serializable]
+    public struct ToolMapping
+    {
+        public ResourceType type;
+        public GameObject prefab;
+    }
+
+    public void CycleTools()
+    {
+        var tools = GetToolsList();
+        if (tools.Count == 0) return;
+
+        currentToolIndex = (currentToolIndex + 1) % tools.Count;
+        EquipTool(tools[currentToolIndex]);
+    }
+
+    public void CycleFood()
+    {
+        var consumables = GetConsumablesList();
+        if (consumables.Count == 0) return;
+
+        currentFoodIndex = (currentFoodIndex + 1) % consumables.Count;
+        var food = consumables[currentFoodIndex];
+        Debug.Log($"[Inventory] Selected food: {food.type}");
+        
+        // Phase 4: Handle eating (Eat one if triggered, for now just select)
+        // If we want to eat immediately on Y press:
+        // EatFood(food.type);
+    }
+
+    private void EatFood(ResourceType type)
+    {
+        if (RemoveResource(type, 1))
+        {
+            float nutrition = 20f; // Default
+            if (type == ResourceType.CookedMeat) nutrition = 40f;
+            else if (type == ResourceType.Berries) nutrition = 10f;
+
+            if (MJ_PlayerHunger.Instance != null)
+            {
+                MJ_PlayerHunger.Instance.Eat(nutrition);
+            }
+        }
+    }
+
+    private void EquipTool(InventorySlot slot)
+    {
+        if (currentToolInstance != null)
+        {
+            Destroy(currentToolInstance);
+        }
+
+        GameObject prefab = GetPrefabForTool(slot.type);
+        if (prefab != null && toolSpawnPoint != null)
+        {
+            currentToolInstance = Instantiate(prefab, toolSpawnPoint.position, toolSpawnPoint.rotation);
+            currentToolInstance.transform.SetParent(toolSpawnPoint);
+            
+            // If it's a sword, we might need special initialization
+            SwordInteraction sword = currentToolInstance.GetComponent<SwordInteraction>();
+            if (sword != null)
+            {
+                // Initialize sword if needed
+            }
+        }
+        
+        Debug.Log($"[Inventory] Equipped tool: {slot.type}");
+    }
+
+    private GameObject GetPrefabForTool(ResourceType type)
+    {
+        foreach (var mapping in toolMappings)
+        {
+            if (mapping.type == type) return mapping.prefab;
+        }
+        return null;
+    }
 
     public ItemCategory GetCategory(ResourceType t)
     {
@@ -152,6 +237,7 @@ public class MJ_PlayerInventory : MonoBehaviour
         {
             case ResourceType.StoneAxe:
             case ResourceType.StonePickaxe:
+            case ResourceType.Sword:
                 return ItemCategory.Tool;
             case ResourceType.CookedMeat:
             case ResourceType.Berries:
@@ -346,6 +432,7 @@ public class MJ_PlayerInventory : MonoBehaviour
             case ResourceType.Berries: return berriesSprite;
             case ResourceType.StoneAxe: return stoneAxeSprite;
             case ResourceType.StonePickaxe: return stonePickaxeSprite;
+            case ResourceType.Sword: return swordSprite;
             case ResourceType.CrudeOil: return crudeOilSprite;
             default: return null;
         }

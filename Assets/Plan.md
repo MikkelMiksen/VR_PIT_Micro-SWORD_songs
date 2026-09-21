@@ -27,3 +27,12 @@ Terrain & Resource logic:
 - Resource placement (trees/rocks) must use `Terrain.SampleHeight` to align with the generated Diamond Square surface.
 
 finally some monsters should show up at night between 12am and 6am.
+
+Tools include swords and axe, pickaxe and torch(tool and placeable)
+Axe is used for higher wood yield on trees.
+pickaxe is used for higher stone & coal yield on respective nodes.
+torch is used for lighting.
+
+beyond this a building system for building a house should be added.
+
+

@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[System.Obsolete("Use TerrainGeneratorManager for async generation.")]
 public class TerrainCalculation : MonoBehaviour
 {
     DiamondSquareTerrainGeneration terrainGen = new DiamondSquareTerrainGeneration();

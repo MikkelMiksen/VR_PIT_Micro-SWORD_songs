@@ -100,22 +100,25 @@ public class PlayerStats : MonoBehaviour
         if (currentHealth <= 0)
         {
             Debug.Log("[SAO] Player Died!");
+            /*
             if (ARGameManager.Instance != null)
             {
                 ARGameManager.Instance.SetState(GameState.GameOver);
             }
+            */
         }
     }
 
     private void UpdateUI()
     {
+        /*
         if (SAO_UIManager.Instance != null)
         {
-            int wave = ARGameManager.Instance != null ? ARGameManager.Instance.currentWave : 0;
-            int remaining = ARGameManager.Instance != null && ARGameManager.Instance.enemySpawnManager != null ? 
-                ARGameManager.Instance.enemySpawnManager.GetRemainingEnemiesCount() : 0;
+            int wave = 0;
+            int remaining = 0;
             
             SAO_UIManager.Instance.UpdateHUD(currentHealth / maxHealth, currentStamina / maxStamina, wave, remaining, score);
         }
+        */
     }
 }

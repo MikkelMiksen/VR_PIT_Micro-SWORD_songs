@@ -17,6 +17,7 @@ using UnityEngine;
         //Tools
         StoneAxe, // Sprite is added to GetSpriteForType()
         StonePickaxe, // Sprite is added to GetSpriteForType()
+        Sword, // Added for Phase 3
     }
 
     [System.Serializable]
