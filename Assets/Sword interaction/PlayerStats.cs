@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class PlayerStats : MonoBehaviour
 {
     [Header("Health")]
@@ -55,34 +56,39 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Add score to the player's score'... needed?
+    /// </summary>
+    /// <param name="amount"></param>
     public void AddScore(int amount)
     {
         score += amount;
         UpdateUI();
     }
 
-    public bool CanAttack()
-    {
-        return currentStamina >= attackStaminaCost;
-    }
-
+    /// <summary>
+    /// check stamina amount > attack requirement
+    /// </summary>
+    /// <returns></returns>
     public bool CanAttack(float cost)
     {
         return currentStamina >= cost;
     }
 
-    public void UseStaminaForAttack()
-    {
-        UseStamina(attackStaminaCost);
-    }
-
+    /// <summary>
+    /// Use stamina
+    /// </summary>
+    /// <param name="amount"></param>
     public void UseStamina(float amount)
     {
         currentStamina -= amount;
         currentStamina = Mathf.Max(currentStamina, 0);
         UpdateUI();
     }
-
+    
+    /// <summary>
+    /// used e.g. on sleep or restart
+    /// </summary>
     public void ResetStats()
     {
         currentHealth = maxHealth;
@@ -91,6 +97,10 @@ public class PlayerStats : MonoBehaviour
         UpdateUI();
     }
 
+    /// <summary>
+    /// Take damage from any source
+    /// </summary>
+    /// <param name="amount"></param>
     public void TakeDamage(float amount)
     {
         currentHealth -= amount;
@@ -106,9 +116,14 @@ public class PlayerStats : MonoBehaviour
                 ARGameManager.Instance.SetState(GameState.GameOver);
             }
             */
+            
+            //TODO: implement death logic
         }
     }
 
+    /// <summary>
+    /// TODO: figure out how UI should work
+    /// </summary>
     private void UpdateUI()
     {
         /*

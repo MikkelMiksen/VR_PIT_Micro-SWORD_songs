@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections;
 
+/// <summary>
+/// UI Manager from the SAO : AR project.
+/// </summary>
 public class SAO_UIManager : MonoBehaviour
 {
     public static SAO_UIManager Instance { get; private set; }
@@ -65,6 +68,10 @@ public class SAO_UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set the screen to the given template.
+    /// </summary>
+    /// <param name="template"></param>
     private void SetScreen(VisualTreeAsset template)
     {
         if (uiDocument == null)
@@ -91,11 +98,17 @@ public class SAO_UIManager : MonoBehaviour
         _root.Add(_currentScreen);
     }
 
+    /// <summary>
+    /// Show the scanning screen.
+    /// </summary>
     public void ShowScanning()
     {
         SetScreen(scanningTemplate);
     }
 
+    /// <summary>
+    /// Show the main menu.
+    /// </summary>
     public void ShowMainMenu()
     {
         SetScreen(mainMenuTemplate);
@@ -112,6 +125,9 @@ public class SAO_UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Show the HUD.
+    /// </summary>
     public void ShowHUD()
     {
         SetScreen(hudTemplate);
@@ -122,6 +138,11 @@ public class SAO_UIManager : MonoBehaviour
         _scoreText = _root.Q<Label>("ScoreText");
     }
 
+    /// <summary>
+    /// Show the game over screen.
+    /// </summary>
+    /// <param name="score"></param>
+    /// <param name="wave"></param>
     public void ShowGameOver(int score, int wave)
     {
         SetScreen(gameOverTemplate);
@@ -142,6 +163,14 @@ public class SAO_UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Update the HUD with the given values.
+    /// </summary>
+    /// <param name="healthPercent"></param>
+    /// <param name="staminaPercent"></param>
+    /// <param name="wave"></param>
+    /// <param name="enemiesRemaining"></param>
+    /// <param name="score"></param>
     public void UpdateHUD(float healthPercent, float staminaPercent, int wave, int enemiesRemaining, int score)
     {
         float hpClamp = Mathf.Clamp01(float.IsNaN(healthPercent) ? 0f : healthPercent);

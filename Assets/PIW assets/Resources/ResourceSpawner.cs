@@ -1,6 +1,9 @@
 ﻿using System.Threading.Tasks;
 using UnityEngine;
 
+/// <summary>
+/// Spawns resources on the terrain.
+/// </summary>
 public class ResourceSpawner : MonoBehaviour
 {
     [Header("Prefabs")]
@@ -13,6 +16,10 @@ public class ResourceSpawner : MonoBehaviour
     [SerializeField] private float _spawnRadius = 200f;
     [SerializeField] private LayerMask _groundLayer;
 
+    /// <summary>
+    /// Spawns resources on the terrain.
+    /// </summary>
+    /// <param name="terrain"></param>
     public async Task SpawnResourcesAsync(Terrain terrain)
     {
         if (terrain == null) return;
@@ -26,6 +33,12 @@ public class ResourceSpawner : MonoBehaviour
         await Task.Yield(); 
     }
 
+    /// <summary>
+    /// Spawns a group of resources on the terrain.
+    /// </summary>
+    /// <param name="prefab"></param>
+    /// <param name="count"></param>
+    /// <param name="terrain"></param>
     private void SpawnResourceGroup(GameObject prefab, int count, Terrain terrain)
     {
         if (prefab == null) return;

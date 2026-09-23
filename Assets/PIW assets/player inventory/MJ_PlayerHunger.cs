@@ -32,6 +32,9 @@ public class MJ_PlayerHunger : MonoBehaviour
         currentHunger = Mathf.Max(currentHunger, 0);
     }
 
+    /// <summary>
+    /// Check if the player is starving and take damage if so
+    /// </summary>
     private void CheckStarvation()
     {
         if (currentHunger <= 0)
@@ -43,6 +46,10 @@ public class MJ_PlayerHunger : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Add food to the player's hunger'
+    /// </summary>
+    /// <param name="amount"></param>
     public void Eat(float amount)
     {
         currentHunger += amount;

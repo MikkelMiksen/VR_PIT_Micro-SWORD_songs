@@ -37,6 +37,9 @@ public class MonsterSpawner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Spawn a new monster at a random position around the player.
+    /// </summary>
     private void SpawnMonster()
     {
         if (_monsterPrefab == null) return;
@@ -66,6 +69,9 @@ public class MonsterSpawner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Decrement the monster count.
+    /// </summary>
     public void DecrementCount()
     {
         _currentMonsterCount = Mathf.Max(0, _currentMonsterCount - 1);

@@ -13,6 +13,9 @@ public class SwordInitializer : MonoBehaviour
         Debug.Log("[SAO] SwordInitializer completed setup.");
     }
 
+    /// <summary>
+    /// Ensure that the PlayerInventoryManager is instantiated.
+    /// </summary>
     void EnsureInventoryManager()
     {
         if (PlayerInventoryManager.Instance == null)
@@ -31,6 +34,9 @@ public class SwordInitializer : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Ensure that the SwordMenuManager is instantiated.
+    /// </summary>
     void EnsureSwordMenu()
     {
         SwordMenuManager menu = FindObjectOfType<SwordMenuManager>();

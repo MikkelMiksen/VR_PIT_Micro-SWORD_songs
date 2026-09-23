@@ -30,6 +30,10 @@ public class EnemyStats : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Take damage from any source.
+    /// </summary>
+    /// <param name="amount"></param>
     public void TakeDamage(float amount)
     {
         if (_isDying) return;
@@ -55,6 +59,9 @@ public class EnemyStats : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Update the health bar UI.
+    /// </summary>
     private void UpdateUI()
     {
         if (healthBarFill != null)
@@ -62,7 +69,10 @@ public class EnemyStats : MonoBehaviour
             healthBarFill.fillAmount = currentHealth / maxHealth;
         }
     }
-
+    
+    /// <summary>
+    /// handle death logic, animations and what not.
+    /// </summary>
     private void Die()
     {
         if (_isDying) return;

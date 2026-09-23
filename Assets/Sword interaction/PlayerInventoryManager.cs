@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+
+// TODO: Depricate?
 public class PlayerInventoryManager : MonoBehaviour
 {
     public static PlayerInventoryManager Instance;
@@ -8,7 +10,7 @@ public class PlayerInventoryManager : MonoBehaviour
     public Transform playerCamera;
     public EquipmentSlot leftShoulder;
     public EquipmentSlot rightShoulder;
-    public List<GameObject> backpackSwords = new List<GameObject>();
+    public List<GameObject> backpackSwords = new();
 
     void Awake()
     {
@@ -33,6 +35,11 @@ public class PlayerInventoryManager : MonoBehaviour
         if (rightShoulder == null) rightShoulder = CreateSlot(EquipmentSlot.SlotType.ShoulderRight);
     }
 
+    /// <summary>
+    /// Create shoulderslot
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     EquipmentSlot CreateSlot(EquipmentSlot.SlotType type)
     {
         GameObject go = new GameObject($"Slot_{type}");

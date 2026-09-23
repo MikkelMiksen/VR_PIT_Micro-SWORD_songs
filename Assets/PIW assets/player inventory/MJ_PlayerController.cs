@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -22,6 +23,9 @@ public class MJ_PlayerController : MonoBehaviour
     
     private Rigidbody rb;
 
+    /// <summary>
+    /// Phase 1: Initialize player controller
+    /// </summary>
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -30,13 +34,20 @@ public class MJ_PlayerController : MonoBehaviour
         cycleToolsAction.action.performed += OnCycleTools;
         cycleFoodAction.action.performed += OnCycleFood;
     }
-
+    
+    /// <summary>
+    /// Phase 2: Clean up input actions
+    /// </summary>
     private void OnDestroy()
     {
         cycleToolsAction.action.performed -= OnCycleTools;
         cycleFoodAction.action.performed -= OnCycleFood;
     }
 
+    /// <summary>
+    /// Cycles for the next HUD item in the inventory.
+    /// </summary>
+    /// <param name="context"></param>
     private void OnCycleTools(InputAction.CallbackContext context)
     {
         // Phase 3: Cycle through tools (B button)
@@ -46,6 +57,10 @@ public class MJ_PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Cycles for the next HUD item in the inventory.
+    /// </summary>
+    /// <param name="context"></param>
     private void OnCycleFood(InputAction.CallbackContext context)
     {
         // Phase 4: Cycle through food (Y button)
@@ -53,6 +68,7 @@ public class MJ_PlayerController : MonoBehaviour
         {
             MJ_PlayerInventory.Instance.CycleFood();
             
+            // TODO: Add logic to eat the selected food item in separate action.
             // For now, let's also eat it immediately on Y press
             // because there's no "Use" button defined yet.
             var consumables = MJ_PlayerInventory.Instance.GetConsumablesList();
@@ -63,6 +79,9 @@ public class MJ_PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Phase 5: Move the player
+    /// </summary>
     void FixedUpdate()
     {
         Vector2 moveInput = moveAction.action.ReadValue<Vector2>();

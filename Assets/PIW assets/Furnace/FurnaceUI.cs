@@ -55,6 +55,10 @@ public class FurnaceUI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Validate input amount
+    /// </summary>
+    /// <param name="input"></param>
     private void OnAmountChanged(string input)
     {
         if (int.TryParse(input, out int value))
@@ -63,6 +67,9 @@ public class FurnaceUI : MonoBehaviour
             enteredAmount = 0;
     }
 
+    /// <summary>
+    /// Add fuel to the furnace
+    /// </summary>
     private void OnConfirmClicked()
     {
         if (enteredAmount <= 0)
@@ -75,11 +82,17 @@ public class FurnaceUI : MonoBehaviour
         Furnace.Instance.AddFuel(selectedResource, enteredAmount);
     }
 
+    /// <summary>
+    /// Show the UI
+    /// </summary>
     public void Show()
     {
         gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// Hide the UI
+    /// </summary>
     public void Hide()
     {
         gameObject.SetActive(false);

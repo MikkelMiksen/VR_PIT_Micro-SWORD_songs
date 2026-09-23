@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Equipment slot for swords
+/// </summary>
 public class EquipmentSlot : MonoBehaviour
 {
     public enum SlotType { ShoulderLeft, ShoulderRight }

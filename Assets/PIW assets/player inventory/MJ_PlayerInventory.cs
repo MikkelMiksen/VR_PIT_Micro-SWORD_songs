@@ -4,6 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Inventory slot
+/// </summary>
 [System.Serializable]
 public class InventorySlot
 {
@@ -23,20 +26,33 @@ public class InventorySlot
     }
 }
 
+/// <summary>
+/// Player inventory
+/// </summary>
 public class MJ_PlayerInventory : MonoBehaviour
 {
     public static MJ_PlayerInventory Instance;
 
-    [SerializeField] private List<InventorySlot> resources = new List<InventorySlot>();
-    public List<InventorySlot> Resources => resources;
+    /// <summary>
+    /// List of all resources in the inventory
+    /// </summary>
+    [SerializeField] private List<InventorySlot> resources = new();
 
+    /// <summary>
+    /// List of image UI elements for each resource slot
+    /// </summary>
+    [SerializeField] private List<Image> images = new();
 
-    [SerializeField] private List<Image> images = new List<Image>();
-
+    /// <summary>
+    /// List of text UI elements for each resource slot
+    /// </summary>
     [SerializeField] private List<TextMeshProUGUI> inventoryNumberDisplay = new List<TextMeshProUGUI>();
 
     [SerializeField] GameObject inventoryGlobalLayout;
 
+    /// <summary>
+    /// Sprites for each resource type
+    /// </summary>
     [SerializeField] private Sprite woodSprite,
         stoneSprite, metalSprite,
         coalSprite, waterSprite,
@@ -46,6 +62,9 @@ public class MJ_PlayerInventory : MonoBehaviour
         swordSprite,
         crudeOilSprite;
 
+    /// <summary>
+    /// Number of slots in the inventory
+    /// </summary>
     private int numOfInventorySlots = 88;
 
     void Awake()
@@ -53,6 +72,10 @@ public class MJ_PlayerInventory : MonoBehaviour
             Instance = this;
     }
 
+    /// <summary>
+    /// Get references to all UI elements in the inventory
+    /// </summary>
+    /// <returns></returns>
     IEnumerator Start()
     {
         yield return new WaitForSeconds(.1f);
@@ -67,6 +90,12 @@ public class MJ_PlayerInventory : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Add a resource to the inventory.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="amount"></param>
+    /// <param name="durability"></param>
     public void AddResource(ResourceType type, int amount, int durability = 0)
     {
 
@@ -122,6 +151,10 @@ public class MJ_PlayerInventory : MonoBehaviour
         UpdateResourcesUIText();
     }
 
+    /// <summary>
+    /// Get Foodtype and amount currently existing in the inventory.
+    /// </summary>
+    /// <returns></returns>
     public List<(ResourceType type, int count)> GetConsumablesList()
     {
         Dictionary<ResourceType, int> map = new Dictionary<ResourceType, int>();
@@ -137,6 +170,10 @@ public class MJ_PlayerInventory : MonoBehaviour
         return list;
     }
 
+    /// <summary>
+    /// Get all tools currently existing in the inventory.
+    /// </summary>
+    /// <returns></returns>
     public List<InventorySlot> GetToolsList()
     {
         var list = new List<InventorySlot>();
@@ -146,6 +183,7 @@ public class MJ_PlayerInventory : MonoBehaviour
         return list;
     }
 
+    
     [Header("Cycling References")]
     [SerializeField] private Transform toolSpawnPoint;
     [SerializeField] private List<ToolMapping> toolMappings = new List<ToolMapping>();
@@ -153,6 +191,9 @@ public class MJ_PlayerInventory : MonoBehaviour
     private int currentToolIndex = -1;
     private int currentFoodIndex = -1;
 
+    /// <summary>
+    /// Mapping of resource type to prefab for tools.
+    /// </summary>
     [System.Serializable]
     public struct ToolMapping
     {
@@ -160,6 +201,9 @@ public class MJ_PlayerInventory : MonoBehaviour
         public GameObject prefab;
     }
 
+    /// <summary>
+    /// Cycle through tools in the inventory.
+    /// </summary>
     public void CycleTools()
     {
         var tools = GetToolsList();
@@ -169,6 +213,9 @@ public class MJ_PlayerInventory : MonoBehaviour
         EquipTool(tools[currentToolIndex]);
     }
 
+    /// <summary>
+    /// Cycle through food in the inventory.
+    /// </summary>
     public void CycleFood()
     {
         var consumables = GetConsumablesList();
@@ -183,6 +230,10 @@ public class MJ_PlayerInventory : MonoBehaviour
         // EatFood(food.type);
     }
 
+    /// <summary>
+    /// Eat food.
+    /// </summary>
+    /// <param name="type"></param>
     private void EatFood(ResourceType type)
     {
         if (RemoveResource(type, 1))
@@ -198,6 +249,10 @@ public class MJ_PlayerInventory : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Equip a tool.
+    /// </summary>
+    /// <param name="slot"></param>
     private void EquipTool(InventorySlot slot)
     {
         if (currentToolInstance != null)
@@ -215,13 +270,40 @@ public class MJ_PlayerInventory : MonoBehaviour
             SwordInteraction sword = currentToolInstance.GetComponent<SwordInteraction>();
             if (sword != null)
             {
-                // Initialize sword if needed
+                // Find anchors if not set
+                Transform left = null;
+                Transform right = null;
+                GameObject[] rootObjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+                foreach (GameObject root in rootObjects)
+                {
+                    Transform[] allChildren = root.GetComponentsInChildren<Transform>(true);
+                    foreach (Transform t in allChildren)
+                    {
+                        if (t.name == "LeftHandAnchor") left = t;
+                        if (t.name == "RightHandAnchor") right = t;
+                    }
+                }
+                sword.leftHand = left;
+                sword.rightHand = right;
+                
+                // Ensure Rigidbody is kinematic for tools
+                var rb = currentToolInstance.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.isKinematic = true;
+                    rb.useGravity = false;
+                }
             }
         }
         
         Debug.Log($"[Inventory] Equipped tool: {slot.type}");
     }
 
+    /// <summary>
+    /// Ask mapping for prefab for a tool. (mapping.prefab)
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     private GameObject GetPrefabForTool(ResourceType type)
     {
         foreach (var mapping in toolMappings)
@@ -231,6 +313,11 @@ public class MJ_PlayerInventory : MonoBehaviour
         return null;
     }
 
+    /// <summary>
+    /// Get category of a resource type.
+    /// </summary>
+    /// <param name="t"></param>
+    /// <returns></returns>
     public ItemCategory GetCategory(ResourceType t)
     {
         switch (t)
@@ -238,6 +325,9 @@ public class MJ_PlayerInventory : MonoBehaviour
             case ResourceType.StoneAxe:
             case ResourceType.StonePickaxe:
             case ResourceType.Sword:
+            case ResourceType.Elucidator:
+            case ResourceType.DarkRepulser:
+            case ResourceType.LambentLight:
                 return ItemCategory.Tool;
             case ResourceType.CookedMeat:
             case ResourceType.Berries:
@@ -247,6 +337,10 @@ public class MJ_PlayerInventory : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Merge stacks of the same type.
+    /// </summary>
+    /// <param name="type"></param>
     private void MergeStacks(ResourceType type)
     {
         for (int i = 0; i < resources.Count; i++)
@@ -274,6 +368,12 @@ public class MJ_PlayerInventory : MonoBehaviour
         resources.RemoveAll(s => s.IsEmpty);
     }
 
+    /// <summary>
+    /// Remove a resource from the inventory.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="amount"></param>
+    /// <returns></returns>
     public bool RemoveResource(ResourceType type, int amount)
     {
         int totalAvailable = GetResourceAmount(type);
@@ -305,6 +405,11 @@ public class MJ_PlayerInventory : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Remove all resources from the inventory.
+    /// </summary>
+    /// <param name="reqIngredients"></param>
+    /// <returns></returns>
     public bool RemoveAllResources(List<RecipeSO.Ingredient> reqIngredients)
     {
         if (HasAllResources(reqIngredients))
@@ -325,11 +430,20 @@ public class MJ_PlayerInventory : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Reset the inventory.
+    /// resources.clear()
+    /// </summary>
     public void ClearInventory()
     {
         resources.Clear();
     }
 
+    /// <summary>
+    /// Used to ask for an amount of a resource type in the inventory.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public int GetResourceAmount(ResourceType type)
     {
         int total = 0;
@@ -341,6 +455,13 @@ public class MJ_PlayerInventory : MonoBehaviour
         return total;
     }
 
+    /// <summary>
+    /// boolean flag to check if the inventory has a type before checking amount of said type, for multiple type and amount checks iterate for each.
+    /// alternatively use HasAllResources(List<RecipeSO.Ingredient> required)
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="amount"></param>
+    /// <returns></returns>
     public bool HasResource(ResourceType type, int amount)
     {
         int total = 0;
@@ -358,6 +479,11 @@ public class MJ_PlayerInventory : MonoBehaviour
         return false; // not enough in total
     }
 
+    /// <summary>
+    /// Primarily used by crafting stations to check if requested crafting cost is present within the inventory.
+    /// </summary>
+    /// <param name="required"></param>
+    /// <returns></returns>
     public bool HasAllResources(List<RecipeSO.Ingredient> required)
     {
         foreach (var pair in required)
@@ -368,14 +494,18 @@ public class MJ_PlayerInventory : MonoBehaviour
         return true;
     }
 
-    
+   
     void Update()
     {
         UpdateResourcesUIText();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     void UpdateResourcesUIText()
     {
+        //preview
         /*for (int i = 0; i < images.Count; i++)
         {
             if (i < resources.Count && !resources[i].IsEmpty)
@@ -417,6 +547,11 @@ public class MJ_PlayerInventory : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Get sprite for a resource type.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public Sprite GetSpriteForType(ResourceType type)
     {
         switch (type)
@@ -433,14 +568,20 @@ public class MJ_PlayerInventory : MonoBehaviour
             case ResourceType.StoneAxe: return stoneAxeSprite;
             case ResourceType.StonePickaxe: return stonePickaxeSprite;
             case ResourceType.Sword: return swordSprite;
+            case ResourceType.Elucidator: return swordSprite; // Use default sword sprite or add specific ones
+            case ResourceType.DarkRepulser: return swordSprite;
+            case ResourceType.LambentLight: return swordSprite;
             case ResourceType.CrudeOil: return crudeOilSprite;
             default: return null;
         }
     }
 
+    /// <summary>
+    /// Sorting the inventory each inventory update, includes auto merging
+    /// </summary>
     private void AutoSortInventory()
     {
-        // 1️⃣ Merge same-type stacks
+        // Merge same-type stacks
         for (int i = 0; i < resources.Count; i++)
         {
             if (resources[i].IsEmpty || resources[i].IsFull) continue;
@@ -461,10 +602,10 @@ public class MJ_PlayerInventory : MonoBehaviour
             }
         }
 
-        // 2️⃣ Remove empty slots
+        // Remove empty slots
         resources.RemoveAll(s => s.IsEmpty);
 
-        // 3️⃣ Sort by resource type name for neatness
+        // Sort by resource type name for neatness
         resources.Sort((a, b) => a.type.CompareTo(b.type));
     }
 }

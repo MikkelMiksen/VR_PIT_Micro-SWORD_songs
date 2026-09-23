@@ -95,6 +95,9 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Move towards the player.
+    /// </summary>
     private void MoveTowardsPlayer()
     {
         Vector3 targetPos = _player.position;
@@ -120,7 +123,12 @@ public class EnemyAI : MonoBehaviour
 
         PlayAnimation("WalkFWD");
     }
-
+    
+    
+    /// <summary>
+    /// Face towards a target position.
+    /// </summary>
+    /// <param name="targetPos"></param>
     private void FaceTarget(Vector3 targetPos)
     {
         Vector3 dir = (targetPos - transform.position);
@@ -132,6 +140,10 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Calculate the direction to avoid obstacles.
+    /// </summary>
+    /// <returns></returns>
     private Vector3 CalculateAvoidance()
     {
         Vector3 avoidance = Vector3.zero;
@@ -150,6 +162,9 @@ public class EnemyAI : MonoBehaviour
         return avoidance;
     }
 
+    /// <summary>
+    /// TODO: document try attack
+    /// </summary>
     private void TryAttack()
     {
         if (Time.time > _lastAttackTime + attackCooldown)
@@ -166,7 +181,11 @@ public class EnemyAI : MonoBehaviour
             }
         }
     }
-
+    
+    /// <summary>
+    /// Play an animation from the Animator component.
+    /// </summary>
+    /// <param name="stateName"></param>
     private void PlayAnimation(string stateName)
     {
         if (_animator != null && _animator.HasState(0, Animator.StringToHash(stateName)))

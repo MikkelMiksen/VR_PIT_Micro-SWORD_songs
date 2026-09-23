@@ -9,6 +9,10 @@ public class SwordDamageTrigger : MonoBehaviour
         _sword = GetComponentInParent<SwordInteraction>();
     }
 
+    /// <summary>
+    /// Sword collision with enemy thus damaging enemy
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         if (_sword == null || !_sword.IsEquipped) return;

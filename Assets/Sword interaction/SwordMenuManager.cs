@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
-using System.Collections.Generic;
 
 public class SwordMenuManager : MonoBehaviour
 {
@@ -23,6 +22,9 @@ public class SwordMenuManager : MonoBehaviour
         InitializeAnchors();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void InitializeAnchors()
     {
         if (playerCamera == null)
@@ -54,12 +56,12 @@ public class SwordMenuManager : MonoBehaviour
             {
                 foreach (var device in InputSystem.devices)
                 {
-                    if (device is UnityEngine.InputSystem.XR.XRController)
+                    if (device is UnityEngine.InputSystem.XR.XRController && device.name.Contains("Left"))
                     {
-                        var primaryButton = device.TryGetChildControl<ButtonControl>("primaryButton"); // X/A button
+                        var primaryButton = device.TryGetChildControl<ButtonControl>("primaryButton"); // X button on Left Controller
                         if (primaryButton != null && primaryButton.wasPressedThisFrame)
                         {
-                            Debug.Log($"[SAO] Primary button pressed on {device.name}");
+                            Debug.Log($"[SAO] X button pressed on {device.name}");
                             ToggleMenu(!_menuActive);
                         }
                     }
@@ -69,7 +71,7 @@ public class SwordMenuManager : MonoBehaviour
         catch (System.Exception e)
         {
             // Suppress errors during early initialization but log them
-            // Debug.LogWarning("[SAO] Input check failed: " + e.Message);
+            Debug.LogWarning("[SAO] Input check failed: " + e.Message);
         }
     }
 
@@ -105,6 +107,9 @@ public class SwordMenuManager : MonoBehaviour
         Debug.Log($"[SAO] Menu toggled: {active}");
     }
 
+    /// <summary>
+    /// Spawn the sword menu.
+    /// </summary>
     public void SpawnSwordMenu()
     {
         if (_menuActive)
@@ -145,6 +150,13 @@ public class SwordMenuManager : MonoBehaviour
             SwordData data = swordDataList[i];
             if (data == null || data.prefab == null) continue;
 
+            // Progressive Unlocking: Only show swords the player has in inventory
+            if (MJ_PlayerInventory.Instance != null && !MJ_PlayerInventory.Instance.HasResource(data.resourceType, 1))
+            {
+                Debug.Log($"[SAO] {data.swordName} ({data.resourceType}) not in inventory, skipping.");
+                continue;
+            }
+
             float angle = (i - (swordDataList.Length - 1) / 2f) * 25f;
             Quaternion rotation = Quaternion.Euler(0, angle, 0);
             Vector3 offset = rotation * Vector3.forward * 0.35f + rotation * Vector3.right * 0.1f;
@@ -152,6 +164,13 @@ public class SwordMenuManager : MonoBehaviour
             GameObject sword = Instantiate(data.prefab, center + offset, rotation * playerCamera.rotation);
             sword.name = $"SAO_{data.swordName}_{i}";
             
+            // Note: We no longer add to inventory here because they must be crafted first.
+            // But we can log that we are displaying a sword the player already has.
+            if (MJ_PlayerInventory.Instance != null)
+            {
+                Debug.Log($"[SAO] Displaying {data.swordName} from player inventory.");
+            }
+
             var rb = sword.GetComponent<Rigidbody>();
             if (rb == null) rb = sword.AddComponent<Rigidbody>();
             rb.isKinematic = true;

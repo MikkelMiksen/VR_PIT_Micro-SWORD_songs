@@ -1,16 +1,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Workbench : MonoBehaviour, Iinteractable
+/// <summary>
+/// Workbench implements CraftingStation and needs pre-defined recipes <typeparam name="RecipeSO"></typeparam> and uses WorkstationType.Workbench.
+/// </summary>
+public class Workbench : CraftingStation
 {
     [Header("Workbench Recipes")]
     public List<RecipeSO> recipes = new();
 
-    public string GetPrompt() => "Press E to use Workbench";
+    public override WorkstationType StationType => WorkstationType.Workbench;
+    public override string StationName => "Workbench";
 
-    public void Interact()
+    /// <summary>
+    /// Displays Workbench crafting UI
+    /// </summary>
+    public override void Interact()
     {
-        // Open UI and pass this station + recipes
-        // CraftingUIController.Instance.ShowUI(this, recipes);
+        if (CraftingUIController.Instance != null)
+        {
+            CraftingUIController.Instance.ShowUI(this, recipes);
+        }
     }
 }

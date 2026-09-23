@@ -52,14 +52,18 @@ public class DayNightCycle : MonoBehaviour
     private AnimationCurve yearlyTemperatureCurve;
 
 
+    /// <summary>
+    /// INIT system clock and time
+    /// </summary>
     void Start()
     {
-        currentTime = DateTime.Now.AddYears(-70);
+        currentTime = DateTime.Now.AddYears(-71);
         currentTime = currentTime.Date + TimeSpan.FromHours(startHour);
         sunriseTime = TimeSpan.FromHours(sunriseHour);
         sunsetTime = TimeSpan.FromHours(sunsetHour);
     }
 
+    
     void Update()
     {
         UpdateTimeOfDay();
@@ -73,6 +77,9 @@ public class DayNightCycle : MonoBehaviour
             temperatureText.text = $"{temp:F1}°C" + " - " + GetCurrentSeason().name;
     }
 
+    /// <summary>
+    /// Update the time of day
+    /// </summary>
     private void UpdateTimeOfDay()
     {
         currentTime = currentTime.AddSeconds(Time.deltaTime * timeMultiplier);
@@ -81,6 +88,9 @@ public class DayNightCycle : MonoBehaviour
             timeText.text = currentTime.ToString("d/M/yyyy-HH:mm");
     }
 
+    /// <summary>
+    /// Update the lighting based on the time used to calculate the new sun position
+    /// </summary>
     private void UpdateLightSettings()
     {
         float dotProduct = Vector3.Dot(sunLight.transform.forward, Vector3.down);
@@ -89,6 +99,9 @@ public class DayNightCycle : MonoBehaviour
         RenderSettings.ambientLight = Color.Lerp(nightAmbientLight,dayAmbientLight,lightChangeCurve.Evaluate(dotProduct));
     }
 
+    /// <summary>
+    /// Update the temperature based on the current time of day and season
+    /// </summary>
     private void UpdateTemperature()
     {
         float yearPercent = GetYearProgress(); // 0–1 fraction of the year
@@ -113,6 +126,9 @@ public class DayNightCycle : MonoBehaviour
         //currentTemperature += UnityEngine.Random.Range(-0.5f, 0.5f);
     }
 
+    /// <summary>
+    /// Rotate the sun based on the current time of day
+    /// </summary>
     private void RotateSun()
     {
         float sunLightRotation;
@@ -138,6 +154,12 @@ public class DayNightCycle : MonoBehaviour
         sunLight.transform.rotation = Quaternion.AngleAxis(sunLightRotation, Vector3.right);
     }
 
+    /// <summary>
+    /// Calculate the difference between two times.
+    /// </summary>
+    /// <param name="fromTime"></param>
+    /// <param name="toTime"></param>
+    /// <returns></returns>
     private TimeSpan CalculateTimeDifference(TimeSpan fromTime, TimeSpan toTime)
     {
         TimeSpan difference = toTime - fromTime;
@@ -150,6 +172,10 @@ public class DayNightCycle : MonoBehaviour
         return difference;
     }
 
+    /// <summary>
+    /// Get the current season based on the current month
+    /// </summary>
+    /// <returns></returns>
     private SeasonTemperature GetCurrentSeason()
     {
         int month = currentTime.Month;
@@ -164,6 +190,10 @@ public class DayNightCycle : MonoBehaviour
             return seasons[3]; // Spring
     }
 
+    /// <summary>
+    /// Get the current year progress as a fraction of the year
+    /// </summary>
+    /// <returns></returns>
     private float GetYearProgress()
     {
         if (DateTime.IsLeapYear(currentTime.Year))

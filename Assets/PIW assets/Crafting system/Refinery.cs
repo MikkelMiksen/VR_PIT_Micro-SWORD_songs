@@ -1,14 +1,27 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Refinery : MonoBehaviour, Iinteractable
+public class Refinery : CraftingStation
 {
+    /// <summary>
+    /// Refinery recipes    
+    /// </summary>
     public List<RecipeSO> refineryRecipes = new();
 
-    public string GetPrompt() => "Press E to use Refinery";
+    /// <summary>
+    /// Refinery station type   
+    /// </summary>
+    public override WorkstationType StationType => WorkstationType.Refinery;
+    public override string StationName => "Refinery";
 
-    public void Interact()
+    /// <summary>
+    /// Displays Refinery crafting UI   
+    /// </summary>
+    public override void Interact()
     {
-        // CraftingUIController.Instance.ShowUI(this, refineryRecipes);
+        if (CraftingUIController.Instance != null)
+        {
+            CraftingUIController.Instance.ShowUI(this, refineryRecipes);
+        }
     }
 }

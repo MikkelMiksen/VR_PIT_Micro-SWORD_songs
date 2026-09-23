@@ -1,5 +1,6 @@
-
-
+/// <summary>
+/// Item category enum
+/// </summary>
 [System.Serializable]
 public enum ItemCategory
 {

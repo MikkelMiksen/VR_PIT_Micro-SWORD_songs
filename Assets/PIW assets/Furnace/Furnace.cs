@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+/// <summary>
+/// Furnace is a simple furnace that consumes fuel and produces heat.
+/// </summary>
 public class Furnace : MonoBehaviour, Iinteractable
 {
     public static Furnace Instance; void Awake() => Instance = this;
@@ -32,6 +35,9 @@ public class Furnace : MonoBehaviour, Iinteractable
         fuels.Add(ResourceType.Diesel, 10);
     }
 
+    /// <summary>
+    /// Show/Hide the UI
+    /// </summary>
     public void Interact()
     {
         if (!isUIOpen)
@@ -46,6 +52,11 @@ public class Furnace : MonoBehaviour, Iinteractable
         }
     }
 
+    /// <summary>
+    /// Add fuel to the furnace.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="amount"></param>
     public void AddFuel(ResourceType type, int amount)
     {
         if (!IsBurnable(type))
@@ -70,18 +81,30 @@ public class Furnace : MonoBehaviour, Iinteractable
         }
     }
 
+    /// <summary>
+    /// Check if a resource is burnable.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     private bool IsBurnable(ResourceType type)
     {
         return ResourceData.BurnProperties[type].IsBurnable;
     }
 
+    
     public string GetPrompt() => "Press E to Interact";
 
+    /// <summary>
+    /// Get the amount of fuel in the furnace.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public string GetResourceAmount(ResourceType type)
     {
         return fuels.ContainsKey(type) ? fuels[type].ToString() : "0";
     }
 
+    
     void Update()
     {
         if (!furnaceIsOn || !hasFuel) return;

@@ -7,11 +7,16 @@ public class SwordInteraction : MonoBehaviour
     public SwordData swordData;
 
     [Header("Meta Interaction Settings")]
+    public Transform leftHand;
+    public Transform rightHand;
     [SerializeField] private Grabbable _grabbable;
     [SerializeField] private Rigidbody _rb;
 
     private bool _isEquipped = false;
 
+    /// <summary>
+    /// Is the sword currently equipped?
+    /// </summary>
     public bool IsEquipped
     {
         get
@@ -39,9 +44,14 @@ public class SwordInteraction : MonoBehaviour
         // For MetaInteractionBridge compatibility
     }
 
+    /// <summary>
+    /// Sword is not sheathed
+    /// </summary>
     public bool IsSheathed => false;
 
-    // Helper to drop the sword if needed by script
+    /// <summary>
+    /// Helper to drop the sword if needed by script
+    /// </summary>
     public void Drop()
     {
         if (_grabbable != null)

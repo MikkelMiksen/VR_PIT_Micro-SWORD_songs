@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Body temperature controller
+/// </summary>
 public class MJ_BodyTemp : MonoBehaviour
 {
     public static MJ_BodyTemp Instance; void Awake() { Instance = this; }
@@ -25,6 +28,9 @@ public class MJ_BodyTemp : MonoBehaviour
         currentAreaTemp = DayNightCycle.Instance.temp;
     }
 
+    /// <summary>
+    /// Update the body temperature
+    /// </summary>
     void Update()
     {
         UpdateBodyTemperature();
@@ -33,6 +39,9 @@ public class MJ_BodyTemp : MonoBehaviour
         ApplyTemperatureDamage();
     }
 
+    /// <summary>
+    /// Apply damage to the player if body temperature is dangerous
+    /// </summary>
     private void ApplyTemperatureDamage()
     {
         if (PlayerStats.Instance != null && !isBodyTempSafe)
@@ -44,6 +53,9 @@ public class MJ_BodyTemp : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Update the current area temperature
+    /// </summary>
     private void UpdateCurrentAreaTemp()
     {
         if (DayNightCycle.Instance != null)
@@ -52,6 +64,9 @@ public class MJ_BodyTemp : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Adjust the body temperature based on the current area temperature
+    /// </summary>
     private void UpdateBodyTemperature()
     {
         float environmentTemp = currentAreaTemp;
@@ -71,6 +86,9 @@ public class MJ_BodyTemp : MonoBehaviour
         bodyTemp = Mathf.Clamp(bodyTemp, 19.8f, 45f);
     }
 
+    /// <summary>
+    /// Check the body temperature and set the appropriate flags
+    /// </summary>
     private void CheckTemperatureEffects()
     {
         if (bodyTemp >= minSafeBodyTemp && bodyTemp <= maxSafeBodyTemp)

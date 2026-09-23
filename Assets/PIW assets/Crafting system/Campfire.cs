@@ -1,15 +1,28 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Campfire : MonoBehaviour, Iinteractable
+/// <summary>
+/// Campfire implements CraftingStation and needs pre-defined recipes <typeparam name="RecipeSO"></typeparam> and uses WorkstationType.Campfire.
+/// intended for cooking a slight heat provision. (NOT IMPLEMENTED)
+/// </summary>
+public class Campfire : CraftingStation
 {
     [Header("Campfire Recipes")]
     public List<RecipeSO> campfireRecipes = new();
 
-    public string GetPrompt() => "Press E to use Campfire";
+    public override WorkstationType StationType => WorkstationType.Campfire;
+    public override string StationName => "Campfire";
 
-    public void Interact()
+    /// <summary>
+    /// Displays Campfire crafting UI
+    /// </summary>
+    public override void Interact()
     {
-        // CraftingUIController.Instance.ShowUI(this, campfireRecipes);
+        if (CraftingUIController.Instance != null)
+        {
+            CraftingUIController.Instance.ShowUI(this, campfireRecipes);
+        }
     }
+    
+    ///TODO: Implement heat provision and cooking
 }

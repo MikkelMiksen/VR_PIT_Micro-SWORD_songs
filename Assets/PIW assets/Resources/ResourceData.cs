@@ -1,8 +1,10 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 public static class ResourceData
 {
+    /// <summary>
+    /// BurnInfo class stores burning properties of a resource.
+    /// </summary>
     public class BurnInfo
     {
         public bool IsBurnable;
@@ -11,6 +13,9 @@ public static class ResourceData
         public float HeatOutput; // optional, used to smelt or heat other items
     }
 
+    /// <summary>
+    /// Burn properties of each resource.
+    /// </summary>
     public static readonly Dictionary<ResourceType, BurnInfo> BurnProperties = new Dictionary<ResourceType, BurnInfo>
     {
         { ResourceType.Wood, new BurnInfo { IsBurnable = true, BurnTime = 5f, BurnRate = 1f, HeatOutput = 31f } },
