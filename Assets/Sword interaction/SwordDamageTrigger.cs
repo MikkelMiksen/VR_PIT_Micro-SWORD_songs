@@ -11,14 +11,25 @@ public class SwordDamageTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (_sword == null || !_sword.IsEquipped) return;
+        if (_sword == null || !_sword.IsEquipped)
+        {
+            return;
+        }
 
-        if (!other.CompareTag("Enemy")) return;
+        if (!other.CompareTag("Enemy"))
+        {
+            return;
+        }
 
         var enemyStats = other.GetComponent<EnemyStats>();
         if (enemyStats == null) enemyStats = other.GetComponentInParent<EnemyStats>();
-
         if (enemyStats == null) return;
+
+        float swingSpeed = _sword.AverageSwingSpeed;
+        if (_sword.HitGuard != null && !_sword.HitGuard.CanHit(other.gameObject, swingSpeed))
+        {
+            return;
+        }
 
         float baseDamage = _sword.swordData != null ? _sword.swordData.damage : (PlayerStats.Instance != null ? PlayerStats.Instance.swordDamage : 25f);
         float cost = _sword.swordData != null ? _sword.swordData.staminaCost : (PlayerStats.Instance != null ? PlayerStats.Instance.attackStaminaCost : 20f);
@@ -28,17 +39,16 @@ public class SwordDamageTrigger : MonoBehaviour
             return;
         }
 
-        float finalDamage = _sword.CalculateSwingDamage(baseDamage, enemyStats.armor);
         Vector3 hitDirection = other.transform.position - _sword.transform.position;
         if (hitDirection.sqrMagnitude < 0.0001f)
         {
             hitDirection = _sword.transform.forward;
         }
 
-        float knockbackBase = _sword.swordData != null ? _sword.swordData.knockbackForce : 4f;
-        Vector3 knockback = _sword.CalculateSwingKnockback(hitDirection, knockbackBase);
+        float finalDamage = _sword.CalculateSwingDamage(baseDamage, enemyStats.armor);
+        Vector3 knockback = _sword.CalculateSwingKnockback(hitDirection, _sword.swordData != null ? _sword.swordData.knockbackForce : 4f);
 
-        enemyStats.TakeDamage(finalDamage);
+        enemyStats.TakeDamage(finalDamage, hitDirection, swingSpeed);
         enemyStats.ApplyKnockback(knockback);
 
         if (PlayerStats.Instance != null)
@@ -48,6 +58,6 @@ public class SwordDamageTrigger : MonoBehaviour
 
         _sword.LogSwing(baseDamage, finalDamage, enemyStats.armor, hitDirection, knockback);
 
-        Debug.Log($"[SAO] Enemy hit for {finalDamage:F2} damage with {_sword?.swordData?.swordName ?? "Blade"}! swingSpeed={_sword.AverageSwingSpeed:F2}");
+        Debug.Log($"[SAO] Enemy hit for {finalDamage:F2} damage with {_sword?.swordData?.swordName ?? "Blade"}! swingSpeed={swingSpeed:F2}");
     }
 }

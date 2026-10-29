@@ -1,13 +1,16 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class EnemyStats : MonoBehaviour
 {
     [Header("Health")]
     public float maxHealth = 50f;
     public float currentHealth;
+
+    [Header("Armor")]
     public float armor = 25f;
     public float armorK = 100f;
+
+    [Header("UI")]
     public Image healthBarFill;
     public Canvas healthBarCanvas;
 
@@ -15,11 +18,13 @@ public class EnemyStats : MonoBehaviour
 
     private Animator _animator;
     private bool _isDying = false;
+    private Rigidbody _rb;
 
     private void Start()
     {
         currentHealth = maxHealth;
         _animator = GetComponent<Animator>();
+        _rb = GetComponent<Rigidbody>();
         UpdateUI();
     }
 
@@ -34,18 +39,25 @@ public class EnemyStats : MonoBehaviour
 
     public void ApplyKnockback(Vector3 force)
     {
-        var rb = GetComponent<Rigidbody>();
-        if (rb != null)
+        if (_rb != null)
         {
-            rb.AddForce(force, ForceMode.Impulse);
+            _rb.AddForce(force, ForceMode.Impulse);
         }
     }
 
     public void TakeDamage(float amount)
     {
+        TakeDamage(amount, Vector3.zero, 0f);
+    }
+
+    public void TakeDamage(float amount, Vector3 hitDirection, float swingSpeed)
+    {
         if (_isDying) return;
 
-        currentHealth -= amount;
+        float mitigation = armor / (armor + armorK);
+        float finalDamage = Mathf.Max(0f, amount * (1f - mitigation));
+
+        currentHealth -= finalDamage;
         currentHealth = Mathf.Max(currentHealth, 0);
         UpdateUI();
 
