@@ -28,7 +28,7 @@ namespace PIW_assets.Resources
         /// <summary>
         /// Returns the prompt for the resource node pile.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>string</returns>
         public string GetPrompt() => "Press E to gather " + resourceType;
     }
 }

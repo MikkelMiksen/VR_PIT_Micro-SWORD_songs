@@ -10,20 +10,22 @@ public enum ResourceType
     Stone, // Sprite is added to GetSpriteForType()
     Metal, // Sprite is added to GetSpriteForType()
     Coal, // Sprite is added to GetSpriteForType()
+    AnimalFat, //TODO: Add sprite
     Water, // Sprite is added to GetSpriteForType()
     Diesel, // Sprite is added to GetSpriteForType()
     RawMeat, // Sprite is added to GetSpriteForType()
-    CrudeOil, // Missing sprite
+    CrudeOil, //TODO: Add sprite
     //Consumables
     CookedMeat, // Sprite is added to GetSpriteForType()
     Berries, // Sprite is added to GetSpriteForType()
+    Apple, //TODO: Add sprite
     //Tools
     StoneAxe, // Sprite is added to GetSpriteForType()
     StonePickaxe, // Sprite is added to GetSpriteForType()
-    Sword, // Added for Phase 3
-    Elucidator,
-    DarkRepulser,
-    LambentLight,
+    Sword, //TODO: Add sprite
+    Elucidator, //TODO: Add sprite
+    DarkRepulser, //TODO: Add sprite
+    LambentLight, //TODO: Add sprite
 }
 
 /// <summary>

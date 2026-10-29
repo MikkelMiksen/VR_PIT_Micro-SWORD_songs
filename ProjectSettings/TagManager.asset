@@ -33,6 +33,7 @@ TagManager:
   - QDSUIToggleThumbnail
   - Dopot
   - Consumer
+  - Enemy
   layers:
   - Default
   - TransparentFX

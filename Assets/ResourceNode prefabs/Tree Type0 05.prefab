@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2118519491108374942}
   - component: {fileID: 2841681692915605368}
   - component: {fileID: 3516720426862089318}
-  - component: {fileID: 5998723368362538718}
   m_Layer: 0
   m_Name: Tree Type0 05
   m_TagString: Untagged
@@ -91,17 +90,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5998723368362538718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 311555186738992240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f3d7553a47fac740902ea7f7212a877, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WoodPile
-  woodAmount: 1
-  shouldDestroyResourceOnCollection: 0
