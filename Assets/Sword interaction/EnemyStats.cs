@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
+using PIW_assets.worldBehaviour;
 
 namespace PIW_assets.Sword_interaction
 {
@@ -63,7 +63,7 @@ namespace PIW_assets.Sword_interaction
             if (_isDying) return;
             _isDying = true;
 
-            MonsterSpawner spawner = FindFirstObjectByType<MonsterSpawner>();
+            MonsterSpawner spawner = FindAnyObjectByType<MonsterSpawner>();
             if (spawner != null)
                 spawner.DecrementCount();
 

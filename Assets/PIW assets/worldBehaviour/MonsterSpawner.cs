@@ -1,4 +1,5 @@
 using UnityEngine;
+using PIW_assets.player_inventory;
 
 namespace PIW_assets.worldBehaviour
 {
@@ -46,7 +47,7 @@ namespace PIW_assets.worldBehaviour
 
             Transform player = MJ_PlayerController.Instance != null
                 ? MJ_PlayerController.Instance.transform
-                : Camera.main.transform;
+                : Camera.main != null ? Camera.main.transform : null;
             if (player == null) return;
 
             Vector2 randomCircle = Random.insideUnitCircle.normalized * _spawnDistance;

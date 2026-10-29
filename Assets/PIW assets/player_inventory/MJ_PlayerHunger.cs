@@ -1,4 +1,5 @@
 using UnityEngine;
+using PIW_assets.Sword_interaction;
 
 namespace PIW_assets.player_inventory
 {

@@ -1,5 +1,5 @@
-using PIW_assets.Sword_interaction;
 using UnityEngine;
+using PIW_assets.Sword_interaction;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -25,7 +25,7 @@ public class EnemyAI : MonoBehaviour
     private void Start()
     {
         if (Camera.main != null) _player = Camera.main.transform;
-        else _player = FindFirstObjectByType<AudioListener>()?.transform;
+        else _player = FindAnyObjectByType<AudioListener>()?.transform;
 
         _animator = GetComponent<Animator>();
         _stats = GetComponent<EnemyStats>();

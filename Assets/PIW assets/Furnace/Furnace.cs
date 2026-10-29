@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using PIW_assets.Resources;
+using PIW_assets.player_inventory;
 using UnityEngine;
 
 /// <summary>
@@ -58,7 +59,7 @@ public class Furnace : MonoBehaviour, Iinteractable
             return;
         }
 
-        if (MJ_PlayerInventory.Instance.RemoveResource(type, amount))
+        if (MJ_PlayerInventory.Instance != null && MJ_PlayerInventory.Instance.RemoveResource(type, amount))
         {
             if (!fuels.ContainsKey(type))
                 fuels[type] = 0;

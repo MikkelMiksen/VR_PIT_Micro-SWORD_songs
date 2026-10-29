@@ -1,8 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+using UnityEngine;
 
-
-// TODO: Depricate?
 public class PlayerInventoryManager : MonoBehaviour
 {
     public static PlayerInventoryManager Instance;
@@ -12,10 +9,7 @@ public class PlayerInventoryManager : MonoBehaviour
     public EquipmentSlot rightShoulder;
     public List<GameObject> backpackSwords = new();
 
-    void Awake()
-    {
-        Instance = this;
-    }
+    void Awake() { Instance = this; }
 
     void Start()
     {
@@ -24,22 +18,15 @@ public class PlayerInventoryManager : MonoBehaviour
             playerCamera = Camera.main != null ? Camera.main.transform : null;
             if (playerCamera == null)
             {
-                // Find any camera if main is not tagged
-                var cam = FindObjectOfType<Camera>();
+                var cam = FindAnyObjectByType<Camera>();
                 if (cam != null) playerCamera = cam.transform;
             }
         }
 
-        // Setup shoulder slots if not assigned
         if (leftShoulder == null) leftShoulder = CreateSlot(EquipmentSlot.SlotType.ShoulderLeft);
         if (rightShoulder == null) rightShoulder = CreateSlot(EquipmentSlot.SlotType.ShoulderRight);
     }
 
-    /// <summary>
-    /// Create shoulderslot
-    /// </summary>
-    /// <param name="type"></param>
-    /// <returns></returns>
     EquipmentSlot CreateSlot(EquipmentSlot.SlotType type)
     {
         GameObject go = new GameObject($"Slot_{type}");

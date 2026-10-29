@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class SwordInitializer : MonoBehaviour
 {
@@ -9,13 +9,9 @@ public class SwordInitializer : MonoBehaviour
     {
         EnsureInventoryManager();
         EnsureSwordMenu();
-        
         Debug.Log("[SAO] SwordInitializer completed setup.");
     }
 
-    /// <summary>
-    /// Ensure that the PlayerInventoryManager is instantiated.
-    /// </summary>
     void EnsureInventoryManager()
     {
         if (PlayerInventoryManager.Instance == null)
@@ -34,12 +30,9 @@ public class SwordInitializer : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Ensure that the SwordMenuManager is instantiated.
-    /// </summary>
     void EnsureSwordMenu()
     {
-        SwordMenuManager menu = FindObjectOfType<SwordMenuManager>();
+        SwordMenuManager menu = FindAnyObjectByType<SwordMenuManager>();
         if (menu == null)
         {
             if (swordMenuPrefab != null)

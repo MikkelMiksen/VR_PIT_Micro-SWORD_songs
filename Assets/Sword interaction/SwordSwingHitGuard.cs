@@ -11,22 +11,16 @@ public class SwordSwingHitGuard : MonoBehaviour
     public bool CanHit(GameObject enemy, float swingSpeed)
     {
         if (enemy == null)
-        {
             return false;
-        }
 
         if (swingSpeed < minimumSwingSpeedForHit)
-        {
             return false;
-        }
 
-        int id = enemy.GetInstanceID();
+        int id = enemy.GetHashCode();
         if (_lastHitTimes.TryGetValue(id, out float hitTime))
         {
             if (Time.time - hitTime < hitCooldown)
-            {
                 return false;
-            }
         }
 
         _lastHitTimes[id] = Time.time;
@@ -36,6 +30,6 @@ public class SwordSwingHitGuard : MonoBehaviour
     public void ClearEnemy(GameObject enemy)
     {
         if (enemy == null) return;
-        _lastHitTimes.Remove(enemy.GetInstanceID());
+        _lastHitTimes.Remove(enemy.GetHashCode());
     }
 }
