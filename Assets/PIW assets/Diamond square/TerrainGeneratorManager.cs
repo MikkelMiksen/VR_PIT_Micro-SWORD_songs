@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.Events;
+using PIW_assets.Resources;
 
 public class TerrainGeneratorManager : MonoBehaviour
 {

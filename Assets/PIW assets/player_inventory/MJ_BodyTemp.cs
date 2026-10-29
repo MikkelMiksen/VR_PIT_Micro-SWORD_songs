@@ -1,11 +1,9 @@
 using UnityEngine;
+using PIW_assets.Sword_interaction;
 using PIW_assets.worldBehaviour;
 
 namespace PIW_assets.player_inventory
 {
-    /// <summary>
-    /// Body temperature controller
-    /// </summary>
     public class MJ_BodyTemp : MonoBehaviour
     {
         public static MJ_BodyTemp Instance;
