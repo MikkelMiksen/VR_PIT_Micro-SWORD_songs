@@ -1,169 +1,138 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
+using PIW_assets.Resources;
+using PIW_assets.player_inventory;
 
-/// <summary>
-/// Furnace is a simple furnace that consumes fuel and produces heat.
-/// </summary>
-public class Furnace : MonoBehaviour, Iinteractable
+namespace PIW_assets.Furnace
 {
-    public static Furnace Instance; void Awake() => Instance = this;
-    public FurnaceUI furnaceUI;
-
-    private bool isUIOpen = false;
-
-    private Dictionary<ResourceType, int> fuels = new Dictionary<ResourceType, int>();
-    public bool hasFuel => fuels.Count > 0;
-
-    public bool furnaceIsOn = false;
-
-    private ResourceType currentFuelType;
-    private bool isBurningFuel = false;
-
-    private float burnTimer = 0f;
-    private float currentUnitBurnTime = 0f;
-    public float totalHeatOutput = 0f;
-    private Material fireMat;
-
-    [SerializeField] private float influenceRadius = 25f, heatMultiplier = 1f;
-
-    public float temperatureInfluence = 0;
-
-    [SerializeField] private Light flameLight;
-
-    void Start()
+    public class Furnace : MonoBehaviour, Iinteractable
     {
-        fuels.Add(ResourceType.Diesel, 10);
-    }
+        public static Furnace Instance;
+        public FurnaceUI furnaceUI;
+        private bool isUIOpen = false;
 
-    /// <summary>
-    /// Show/Hide the UI
-    /// </summary>
-    public void Interact()
-    {
-        if (!isUIOpen)
+        private Dictionary<ResourceType, int> fuels = new Dictionary<ResourceType, int>();
+        public bool hasFuel => fuels.Count > 0;
+        public bool furnaceIsOn = false;
+
+        private ResourceType currentFuelType;
+        private bool isBurningFuel = false;
+
+        private float burnTimer = 0f;
+        private float currentUnitBurnTime = 0f;
+        public float totalHeatOutput = 0f;
+        private Material fireMat;
+
+        [SerializeField] private float influenceRadius = 25f, heatMultiplier = 1f;
+        public float temperatureInfluence = 0;
+        [SerializeField] private Light flameLight;
+
+        void Awake() => Instance = this;
+
+        void Start() { fuels.Add(ResourceType.Diesel, 10); }
+
+        public void Interact()
         {
-            furnaceUI.Show();
-            isUIOpen = true;
-        }
-        else
-        {
-            furnaceUI.Hide();
-            isUIOpen = false;
-        }
-    }
-
-    /// <summary>
-    /// Add fuel to the furnace.
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="amount"></param>
-    public void AddFuel(ResourceType type, int amount)
-    {
-        if (!IsBurnable(type))
-        {
-            Debug.Log($"❌ {type} cannot be burned!");
-            return;
-        }
-
-        if (MJ_PlayerInventory.Instance.RemoveResource(type, amount))
-        {
-            if (!fuels.ContainsKey(type))
-                fuels[type] = 0;
-
-            fuels[type] += amount;
-            Debug.Log($"🔥 Added {amount}x {type} to furnace!");
-
-            furnaceIsOn = true;
-        }
-        else
-        {
-            Debug.Log($"❌ Not enough {type} in inventory!");
-        }
-    }
-
-    /// <summary>
-    /// Check if a resource is burnable.
-    /// </summary>
-    /// <param name="type"></param>
-    /// <returns></returns>
-    private bool IsBurnable(ResourceType type)
-    {
-        return ResourceData.BurnProperties[type].IsBurnable;
-    }
-
-    
-    public string GetPrompt() => "Press E to Interact";
-
-    /// <summary>
-    /// Get the amount of fuel in the furnace.
-    /// </summary>
-    /// <param name="type"></param>
-    /// <returns></returns>
-    public string GetResourceAmount(ResourceType type)
-    {
-        return fuels.ContainsKey(type) ? fuels[type].ToString() : "0";
-    }
-
-    
-    void Update()
-    {
-        if (!furnaceIsOn || !hasFuel) return;
-
-        // pick next fuel if none burning
-        if (!isBurningFuel)
-        {
-            foreach (var kvp in fuels)
+            if (!isUIOpen)
             {
-                currentFuelType = kvp.Key;
-                currentUnitBurnTime = ResourceData.BurnProperties[currentFuelType].BurnTime / ResourceData.BurnProperties[currentFuelType].BurnRate;
-                burnTimer = 0f;
-                isBurningFuel = true;
-                break;
+                furnaceUI.Show();
+                isUIOpen = true;
+            }
+            else
+            {
+                furnaceUI.Hide();
+                isUIOpen = false;
             }
         }
 
-        if (isBurningFuel)
+        public void AddFuel(ResourceType type, int amount)
         {
-            burnTimer += Time.deltaTime;
-            totalHeatOutput = ResourceData.BurnProperties[currentFuelType].HeatOutput * heatMultiplier;
-
-            if (burnTimer >= currentUnitBurnTime)
+            if (!IsBurnable(type))
             {
-                burnTimer = 0f;
-                fuels[currentFuelType]--;
-                Debug.Log($"🔥 Burned 1 {currentFuelType} — Remaining: {fuels[currentFuelType]}");
+                Debug.Log($"❌ {type} cannot be burned!");
+                return;
+            }
 
-                if (fuels[currentFuelType] <= 0)
-                    fuels.Remove(currentFuelType);
+            if (MJ_PlayerInventory.Instance.RemoveResource(type, amount))
+            {
+                if (!fuels.ContainsKey(type))
+                    fuels[type] = 0;
 
-                isBurningFuel = false; // next fuel in next frame
+                fuels[type] += amount;
+                furnaceIsOn = true;
+            }
+            else
+            {
+                Debug.Log($"❌ Not enough {type} in inventory!");
             }
         }
 
-        if (!hasFuel)
+        private bool IsBurnable(ResourceType type)
         {
-            furnaceIsOn = false;
-            totalHeatOutput = 0f;
-            Debug.Log("🔥 Furnace stopped — no more fuel.");
+            return ResourceData.BurnProperties[type].IsBurnable;
         }
 
-        GameObject fire = GameObject.Find("Fire");
-        if (isBurningFuel)
-        {
-            temperatureInfluence = (influenceRadius - Vector3.Distance(MJ_PlayerController.Instance.transform.position, transform.position)) / influenceRadius;
-            flameLight.intensity = 25.02f;
-            Color tmpCol = fire.GetComponent<MeshRenderer>().material.color;
-            tmpCol.a = 255;
-            fire.GetComponent<MeshRenderer>().material.color = tmpCol;
+        public string GetPrompt() => "Press E to Interact";
 
-        }
-        else
+        public string GetResourceAmount(ResourceType type)
         {
-            temperatureInfluence = 0f;
-            flameLight.intensity = 0;
-            Color tmpCol = fire.GetComponent<MeshRenderer>().material.color;
-            tmpCol.a = 0;
-            fire.GetComponent<MeshRenderer>().material.color = tmpCol;
+            return fuels.ContainsKey(type) ? fuels[type].ToString() : "0";
+        }
+
+        void Update()
+        {
+            if (!furnaceIsOn || !hasFuel) return;
+
+            if (!isBurningFuel)
+            {
+                foreach (var kvp in fuels)
+                {
+                    currentFuelType = kvp.Key;
+                    currentUnitBurnTime = ResourceData.BurnProperties[currentFuelType].BurnTime / ResourceData.BurnProperties[currentFuelType].BurnRate;
+                    burnTimer = 0f;
+                    isBurningFuel = true;
+                    break;
+                }
+            }
+
+            if (isBurningFuel)
+            {
+                burnTimer += Time.deltaTime;
+                totalHeatOutput = ResourceData.BurnProperties[currentFuelType].HeatOutput * heatMultiplier;
+
+                if (burnTimer >= currentUnitBurnTime)
+                {
+                    burnTimer = 0f;
+                    fuels[currentFuelType]--;
+                    if (fuels[currentFuelType] <= 0)
+                        fuels.Remove(currentFuelType);
+                    isBurningFuel = false;
+                }
+            }
+
+            if (!hasFuel)
+            {
+                furnaceIsOn = false;
+                totalHeatOutput = 0f;
+            }
+
+            GameObject fire = GameObject.Find("Fire");
+            if (isBurningFuel && fire != null)
+            {
+                temperatureInfluence = (influenceRadius - Vector3.Distance(MJ_PlayerController.Instance.transform.position, transform.position)) / influenceRadius;
+                flameLight.intensity = 25.02f;
+                Color tmpCol = fire.GetComponent<MeshRenderer>().material.color;
+                tmpCol.a = 255;
+                fire.GetComponent<MeshRenderer>().material.color = tmpCol;
+            }
+            else if (fire != null)
+            {
+                temperatureInfluence = 0f;
+                flameLight.intensity = 0;
+                Color tmpCol = fire.GetComponent<MeshRenderer>().material.color;
+                tmpCol.a = 0;
+                fire.GetComponent<MeshRenderer>().material.color = tmpCol;
+            }
         }
     }
 }
