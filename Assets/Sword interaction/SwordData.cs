@@ -1,4 +1,5 @@
 using UnityEngine;
+using PIW_assets.Resources;
 
 namespace PIW_assets.Sword_interaction
 {

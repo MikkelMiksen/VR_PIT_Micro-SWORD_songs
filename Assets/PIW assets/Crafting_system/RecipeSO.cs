@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using PIW_assets.Resources;
 using UnityEngine;
 
 namespace PIW_assets.Crafting_system

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using PIW_assets.Resources;
+using PIW_assets.player_inventory;
 using UnityEngine;
 
 public class MJ_HandQuickSlots : MonoBehaviour
@@ -178,13 +180,13 @@ public class MJ_HandQuickSlots : MonoBehaviour
             return;
         }
 
-        if (MJ_PlayerInventory.Instance.IsFood(selectedType))
+        if (MJ_PlayerInventory.Instance.GetCategory(selectedType) == ItemCategory.Consumable)
         {
             MJ_PlayerInventory.Instance.EatFood(selectedType);
             return;
         }
 
-        MJ_PlayerInventory.Instance.TryEquipTool(selectedType);
+        MJ_PlayerInventory.Instance.CycleTools();
     }
 
     private void RefreshAllVisuals()

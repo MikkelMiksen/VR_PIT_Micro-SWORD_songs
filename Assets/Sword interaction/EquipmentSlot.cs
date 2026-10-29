@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using UnityEngine;
+using PIW_assets.Sword_interaction;
 
 /// <summary>
 /// Equipment slot for swords
@@ -9,8 +10,8 @@ public class EquipmentSlot : MonoBehaviour
     public SlotType slotType;
     public SwordInteraction slottedSword;
     public Transform playerCamera;
-    
-    public Vector3 offset = new Vector3(0.25f, -0.3f, -0.2f); // Default for right shoulder
+
+    public Vector3 offset = new Vector3(0.25f, -0.3f, -0.2f);
 
     void Start()
     {
@@ -25,13 +26,11 @@ public class EquipmentSlot : MonoBehaviour
     {
         if (playerCamera == null) return;
 
-        // Position slot relative to camera
         Vector3 shoulderOffset = playerCamera.right * (slotType == SlotType.ShoulderRight ? offset.x : -offset.x);
         shoulderOffset += playerCamera.up * offset.y;
         shoulderOffset += playerCamera.forward * offset.z;
 
         transform.position = playerCamera.position + shoulderOffset;
-        // Keep rotation aligned with player body (simplified as camera Y rotation)
         transform.rotation = Quaternion.Euler(0, playerCamera.eulerAngles.y, 0);
     }
 }

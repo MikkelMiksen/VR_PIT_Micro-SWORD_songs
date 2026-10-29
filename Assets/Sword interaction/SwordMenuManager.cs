@@ -1,3 +1,6 @@
+using PIW_assets.Resources;
+using PIW_assets.Sword_interaction;
+using PIW_assets.player_inventory;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -22,9 +25,6 @@ public class SwordMenuManager : MonoBehaviour
         InitializeAnchors();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public void InitializeAnchors()
     {
         if (playerCamera == null)
@@ -43,22 +43,21 @@ public class SwordMenuManager : MonoBehaviour
                 if (t.name == "RightHandAnchor") rightHand = t;
             }
         }
-        
+
         Debug.Log($"[SAO] Anchors - Left: {leftHand != null}, Right: {rightHand != null}");
     }
 
     void Update()
     {
-        try 
+        try
         {
-            // Meta Quest 3 / XR Controller Support
             if (InputSystem.devices.Count > 0)
             {
                 foreach (var device in InputSystem.devices)
                 {
                     if (device is UnityEngine.InputSystem.XR.XRController && device.name.Contains("Left"))
                     {
-                        var primaryButton = device.TryGetChildControl<ButtonControl>("primaryButton"); // X button on Left Controller
+                        var primaryButton = device.TryGetChildControl<ButtonControl>("primaryButton");
                         if (primaryButton != null && primaryButton.wasPressedThisFrame)
                         {
                             Debug.Log($"[SAO] X button pressed on {device.name}");
@@ -70,7 +69,6 @@ public class SwordMenuManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            // Suppress errors during early initialization but log them
             Debug.LogWarning("[SAO] Input check failed: " + e.Message);
         }
     }
@@ -79,7 +77,7 @@ public class SwordMenuManager : MonoBehaviour
     {
         if (active)
         {
-             SpawnSwordMenu();
+            SpawnSwordMenu();
         }
         else
         {
@@ -89,15 +87,12 @@ public class SwordMenuManager : MonoBehaviour
                 {
                     if (sword != null)
                     {
-                         // If not equipped or sheathed, we could destroy or hide
-                         // For SAO "Inventory", they should probably go back to backpack if not in hand/shoulder
-                         SwordInteraction si = sword.GetComponent<SwordInteraction>();
-                         if (si != null && (si.IsEquipped || si.IsSheathed))
-                         {
-                             // Do not destroy if player is using it
-                             continue;
-                         }
-                         Destroy(sword);
+                        SwordInteraction si = sword.GetComponent<SwordInteraction>();
+                        if (si != null && (si.IsEquipped || si.IsSheathed))
+                        {
+                            continue;
+                        }
+                        Destroy(sword);
                     }
                 }
                 _activeSwords = null;
@@ -107,9 +102,6 @@ public class SwordMenuManager : MonoBehaviour
         Debug.Log($"[SAO] Menu toggled: {active}");
     }
 
-    /// <summary>
-    /// Spawn the sword menu.
-    /// </summary>
     public void SpawnSwordMenu()
     {
         if (_menuActive)
@@ -141,7 +133,7 @@ public class SwordMenuManager : MonoBehaviour
         }
 
         _activeSwords = new GameObject[swordDataList.Length];
-        
+
         Vector3 center = playerCamera.position + playerCamera.forward * spawnDistance;
         center.y += menuHeightOffset;
 
@@ -150,7 +142,6 @@ public class SwordMenuManager : MonoBehaviour
             SwordData data = swordDataList[i];
             if (data == null || data.prefab == null) continue;
 
-            // Progressive Unlocking: Only show swords the player has in inventory
             if (MJ_PlayerInventory.Instance != null && !MJ_PlayerInventory.Instance.HasResource(data.resourceType, 1))
             {
                 Debug.Log($"[SAO] {data.swordName} ({data.resourceType}) not in inventory, skipping.");
@@ -160,12 +151,10 @@ public class SwordMenuManager : MonoBehaviour
             float angle = (i - (swordDataList.Length - 1) / 2f) * 25f;
             Quaternion rotation = Quaternion.Euler(0, angle, 0);
             Vector3 offset = rotation * Vector3.forward * 0.35f + rotation * Vector3.right * 0.1f;
-            
+
             GameObject sword = Instantiate(data.prefab, center + offset, rotation * playerCamera.rotation);
             sword.name = $"SAO_{data.swordName}_{i}";
-            
-            // Note: We no longer add to inventory here because they must be crafted first.
-            // But we can log that we are displaying a sword the player already has.
+
             if (MJ_PlayerInventory.Instance != null)
             {
                 Debug.Log($"[SAO] Displaying {data.swordName} from player inventory.");
@@ -184,7 +173,7 @@ public class SwordMenuManager : MonoBehaviour
 
             var damageTrigger = sword.GetComponent<SwordDamageTrigger>();
             if (damageTrigger == null) sword.AddComponent<SwordDamageTrigger>();
-            
+
             sword.transform.localScale = Vector3.zero;
             StartCoroutine(ScaleUp(sword.transform));
 

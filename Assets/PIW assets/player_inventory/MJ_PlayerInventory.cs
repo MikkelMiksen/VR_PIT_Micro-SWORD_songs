@@ -1,6 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using PIW_assets.Crafting_system;
+using PIW_assets.Resources;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -60,21 +59,6 @@ namespace PIW_assets.player_inventory
         }
 
         void Awake() => Instance = this;
-
-        IEnumerator Start()
-        {
-            yield return new WaitForSeconds(.1f);
-            foreach (var theImage in inventoryGlobalLayout.GetComponentsInChildren<Image>())
-            {
-                images.Add(theImage);
-            }
-
-            yield return new WaitForSeconds(.1f);
-            foreach (var text in inventoryGlobalLayout.GetComponentsInChildren<TextMeshProUGUI>())
-            {
-                inventoryNumberDisplay.Add(text);
-            }
-        }
 
         public void AddResource(ResourceType type, int amount, int durability = 0)
         {

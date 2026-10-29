@@ -1,11 +1,11 @@
 using System.Linq;
+using PIW_assets.Resources;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class FurnaceUI : MonoBehaviour
 {
-
     [Header("UI References")]
     public TMP_Dropdown inputTypeDropdown;
     public TMP_InputField inputAmountField;
@@ -26,7 +26,6 @@ public class FurnaceUI : MonoBehaviour
 
     private void Start()
     {
-        // Populate dropdown with enum names
         inputTypeDropdown.ClearOptions();
         inputTypeDropdown.AddOptions(System.Enum.GetNames(typeof(ResourceType)).ToList());
 
@@ -34,8 +33,7 @@ public class FurnaceUI : MonoBehaviour
         inputAmountField.onValueChanged.AddListener(OnAmountChanged);
         confirmButton.onClick.AddListener(OnConfirmClicked);
 
-        OnResourceChanged(0); // initialize image
-
+        OnResourceChanged(0);
         Hide();
     }
 
@@ -43,22 +41,17 @@ public class FurnaceUI : MonoBehaviour
     {
         selectedResource = (ResourceType)index;
 
-        // Update image
         switch (selectedResource)
         {
-            case ResourceType.Wood:   resourceImage.sprite = woodSprite; break;
-            case ResourceType.Stone:  resourceImage.sprite = stoneSprite; break;
-            case ResourceType.Metal:  resourceImage.sprite = metalSprite; break;
-            case ResourceType.Coal:   resourceImage.sprite = coalSprite; break;
-            case ResourceType.Water:  resourceImage.sprite = waterSprite; break;
+            case ResourceType.Wood: resourceImage.sprite = woodSprite; break;
+            case ResourceType.Stone: resourceImage.sprite = stoneSprite; break;
+            case ResourceType.Metal: resourceImage.sprite = metalSprite; break;
+            case ResourceType.Coal: resourceImage.sprite = coalSprite; break;
+            case ResourceType.Water: resourceImage.sprite = waterSprite; break;
             case ResourceType.Diesel: resourceImage.sprite = dieselSprite; break;
         }
     }
 
-    /// <summary>
-    /// Validate input amount
-    /// </summary>
-    /// <param name="input"></param>
     private void OnAmountChanged(string input)
     {
         if (int.TryParse(input, out int value))
@@ -67,9 +60,6 @@ public class FurnaceUI : MonoBehaviour
             enteredAmount = 0;
     }
 
-    /// <summary>
-    /// Add fuel to the furnace
-    /// </summary>
     private void OnConfirmClicked()
     {
         if (enteredAmount <= 0)
@@ -78,21 +68,14 @@ public class FurnaceUI : MonoBehaviour
             return;
         }
 
-        // Tell Furnace to try adding fuel
         Furnace.Instance.AddFuel(selectedResource, enteredAmount);
     }
 
-    /// <summary>
-    /// Show the UI
-    /// </summary>
     public void Show()
     {
         gameObject.SetActive(true);
     }
 
-    /// <summary>
-    /// Hide the UI
-    /// </summary>
     public void Hide()
     {
         gameObject.SetActive(false);

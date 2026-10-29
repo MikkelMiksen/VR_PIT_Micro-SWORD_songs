@@ -1,4 +1,5 @@
 using UnityEngine;
+using PIW_assets.Resources;
 
 namespace PIW_assets.Resources
 {
@@ -27,9 +28,6 @@ namespace PIW_assets.Resources
         LambentLight,
     }
 
-    /// <summary>
-    /// Resource stack, when you stack resources, you get a stack of them
-    /// </summary>
     [System.Serializable]
     public class ResourceStack
     {

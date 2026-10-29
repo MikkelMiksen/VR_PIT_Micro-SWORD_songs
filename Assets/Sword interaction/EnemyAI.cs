@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections.Generic;
+using PIW_assets.Resources;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -48,14 +48,6 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
-        /*
-        if (ARGameManager.Instance != null && ARGameManager.Instance.currentState != GameState.Gameplay)
-        {
-            PlayAnimation("IdleBattle");
-            return;
-        }
-        */
-
         Vector3 flatPlayerPos = _player.position;
         if (!isFlying) flatPlayerPos.y = transform.position.y;
         float distanceToPlayer = Vector3.Distance(transform.position, flatPlayerPos);
@@ -95,9 +87,6 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Move towards the player.
-    /// </summary>
     private void MoveTowardsPlayer()
     {
         Vector3 targetPos = _player.position;
@@ -123,12 +112,7 @@ public class EnemyAI : MonoBehaviour
 
         PlayAnimation("WalkFWD");
     }
-    
-    
-    /// <summary>
-    /// Face towards a target position.
-    /// </summary>
-    /// <param name="targetPos"></param>
+
     private void FaceTarget(Vector3 targetPos)
     {
         Vector3 dir = (targetPos - transform.position);
@@ -140,10 +124,6 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Calculate the direction to avoid obstacles.
-    /// </summary>
-    /// <returns></returns>
     private Vector3 CalculateAvoidance()
     {
         Vector3 avoidance = Vector3.zero;
@@ -151,7 +131,7 @@ public class EnemyAI : MonoBehaviour
         foreach (var obs in obstacles)
         {
             if (obs.transform == transform || obs.transform == _player || obs.isTrigger) continue;
-            
+
             Vector3 diff = transform.position - obs.transform.position;
             if (diff.sqrMagnitude > 0.001f)
             {
@@ -162,9 +142,6 @@ public class EnemyAI : MonoBehaviour
         return avoidance;
     }
 
-    /// <summary>
-    /// TODO: document try attack
-    /// </summary>
     private void TryAttack()
     {
         if (Time.time > _lastAttackTime + attackCooldown)
@@ -172,7 +149,7 @@ public class EnemyAI : MonoBehaviour
             _lastAttackTime = Time.time;
             currentState = State.Attacking;
             PlayAnimation("Attack01");
-            
+
             var playerStats = PlayerStats.Instance != null ? PlayerStats.Instance : _player.GetComponentInParent<PlayerStats>();
             if (playerStats != null)
             {
@@ -181,11 +158,7 @@ public class EnemyAI : MonoBehaviour
             }
         }
     }
-    
-    /// <summary>
-    /// Play an animation from the Animator component.
-    /// </summary>
-    /// <param name="stateName"></param>
+
     private void PlayAnimation(string stateName)
     {
         if (_animator != null && _animator.HasState(0, Animator.StringToHash(stateName)))

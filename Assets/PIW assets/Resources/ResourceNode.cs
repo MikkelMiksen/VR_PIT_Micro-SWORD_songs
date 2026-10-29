@@ -1,4 +1,5 @@
 using UnityEngine;
+using PIW_assets.player_inventory;
 
 namespace PIW_assets.Resources
 {
