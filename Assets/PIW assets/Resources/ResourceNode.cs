@@ -1,14 +1,21 @@
 using UnityEngine;
-using PIW_assets.player_inventory;
 
 namespace PIW_assets.Resources
 {
+    /// <summary>
+    /// Use this class to make any object in the scene a resource node.
+    /// </summary>
     public class ResourceNode : MonoBehaviour, Iinteractable
     {
-        [SerializeField] private ResourceType resourceType = ResourceType.Wood;
+        [SerializeField] ResourceType resourceType = ResourceType.Wood;
+
         [SerializeField] private int resourceAmount;
+
         [SerializeField] private bool shouldDestroyResourceOnCollection;
 
+        /// <summary>
+        /// Collects resource node from the pile and adds it to the player inventory.
+        /// </summary>
         public void Interact()
         {
             MJ_PlayerInventory.Instance.AddResource(resourceType, resourceAmount);
@@ -18,6 +25,10 @@ namespace PIW_assets.Resources
             }
         }
 
+        /// <summary>
+        /// Returns the prompt for the resource node pile.
+        /// </summary>
+        /// <returns>string</returns>
         public string GetPrompt() => "Press E to gather " + resourceType;
     }
 }
