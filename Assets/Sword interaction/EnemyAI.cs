@@ -1,5 +1,5 @@
+using PIW_assets.Sword_interaction;
 using UnityEngine;
-using PIW_assets.Resources;
 
 public class EnemyAI : MonoBehaviour
 {
