@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class ResourceData
 {
@@ -8,9 +9,25 @@ public static class ResourceData
     public class BurnInfo
     {
         public bool IsBurnable;
-        public float BurnTime;   // how long it burns
-        public float BurnRate;   // how fast it’s consumed
-        public float HeatOutput; // optional, used to smelt or heat other items
+        public float BurnTime;
+        public float BurnRate;
+        public float HeatOutput;
+    }
+
+    public static bool IsToolResource(ResourceType type)
+    {
+        switch (type)
+        {
+            case ResourceType.StoneAxe:
+            case ResourceType.StonePickaxe:
+            case ResourceType.Sword:
+            case ResourceType.Elucidator:
+            case ResourceType.DarkRepulser:
+            case ResourceType.LambentLight:
+                return true;
+            default:
+                return false;
+        }
     }
 
     /// <summary>

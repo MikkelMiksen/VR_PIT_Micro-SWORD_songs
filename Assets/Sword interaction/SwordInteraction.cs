@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using Oculus.Interaction;
+using UnityEngine;
 
 public class SwordInteraction : MonoBehaviour
 {
@@ -12,11 +11,17 @@ public class SwordInteraction : MonoBehaviour
     [SerializeField] private Grabbable _grabbable;
     [SerializeField] private Rigidbody _rb;
 
+    [Header("Swing Metrics")]
+    [SerializeField] private SwordSwingTelemetry _telemetry = new SwordSwingTelemetry();
+    [SerializeField] private SwordDamageMath _damageMath = new SwordDamageMath();
+    [SerializeField] private SwordLoggingManager _loggingManager = new SwordLoggingManager();
+
     private bool _isEquipped = false;
 
-    /// <summary>
-    /// Is the sword currently equipped?
-    /// </summary>
+    public float AverageSwingSpeed => _telemetry != null ? _telemetry.AverageSpeed : 0f;
+    public SwordDamageMath DamageMath => _damageMath;
+    public SwordLoggingManager LoggingManager => _loggingManager;
+
     public bool IsEquipped
     {
         get
@@ -31,33 +36,45 @@ public class SwordInteraction : MonoBehaviour
     {
         if (_rb == null) _rb = GetComponent<Rigidbody>();
         if (_grabbable == null) _grabbable = GetComponent<Grabbable>();
+        if (_telemetry == null) _telemetry = new SwordSwingTelemetry();
+        if (_damageMath == null) _damageMath = new SwordDamageMath();
+        if (_loggingManager == null) _loggingManager = new SwordLoggingManager();
     }
 
     void Update()
     {
-        // Meta Interaction SDK handles positioning when grabbed
         _isEquipped = IsEquipped;
+        _telemetry?.Sample(transform.position, Time.deltaTime);
+    }
+
+    public float CalculateSwingDamage(float baseDamage, float armor)
+    {
+        if (_damageMath == null) return baseDamage;
+        return _damageMath.CalculateDamage(baseDamage, AverageSwingSpeed, armor);
+    }
+
+    public Vector3 CalculateSwingKnockback(Vector3 hitDirection, float baseKnockback)
+    {
+        if (_damageMath == null) return Vector3.zero;
+        return _damageMath.CalculateKnockback(AverageSwingSpeed, hitDirection, baseKnockback);
+    }
+
+    public void LogSwing(float rawDamage, float finalDamage, float armorValue, Vector3 hitDirection, Vector3 knockback)
+    {
+        if (_loggingManager == null) return;
+        _loggingManager.LogSwing(swordData != null ? swordData.swordName : "Sword", AverageSwingSpeed, rawDamage, finalDamage, armorValue, hitDirection, knockback);
     }
 
     public void Interact()
     {
-        // For MetaInteractionBridge compatibility
     }
 
-    /// <summary>
-    /// Sword is not sheathed
-    /// </summary>
     public bool IsSheathed => false;
 
-    /// <summary>
-    /// Helper to drop the sword if needed by script
-    /// </summary>
     public void Drop()
     {
         if (_grabbable != null)
         {
-            // Meta Interaction SDK doesn't have a direct "ForceDrop" on Grabbable easily 
-            // without accessing the Interactor, but we can disable/enable it.
         }
     }
 }

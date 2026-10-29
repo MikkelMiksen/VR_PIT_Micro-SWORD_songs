@@ -6,6 +6,8 @@ public class EnemyStats : MonoBehaviour
     [Header("Health")]
     public float maxHealth = 50f;
     public float currentHealth;
+    public float armor = 25f;
+    public float armorK = 100f;
     public Image healthBarFill;
     public Canvas healthBarCanvas;
 
@@ -30,10 +32,15 @@ public class EnemyStats : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Take damage from any source.
-    /// </summary>
-    /// <param name="amount"></param>
+    public void ApplyKnockback(Vector3 force)
+    {
+        var rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.AddForce(force, ForceMode.Impulse);
+        }
+    }
+
     public void TakeDamage(float amount)
     {
         if (_isDying) return;
@@ -59,9 +66,6 @@ public class EnemyStats : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Update the health bar UI.
-    /// </summary>
     private void UpdateUI()
     {
         if (healthBarFill != null)
@@ -69,10 +73,7 @@ public class EnemyStats : MonoBehaviour
             healthBarFill.fillAmount = currentHealth / maxHealth;
         }
     }
-    
-    /// <summary>
-    /// handle death logic, animations and what not.
-    /// </summary>
+
     private void Die()
     {
         if (_isDying) return;
@@ -86,7 +87,6 @@ public class EnemyStats : MonoBehaviour
 
         Debug.Log($"[SAO] Enemy {gameObject.name} defeated!");
 
-        // Disable colliders so it doesn't block attacks or movement
         var colliders = GetComponentsInChildren<Collider>();
         foreach (var col in colliders)
         {
