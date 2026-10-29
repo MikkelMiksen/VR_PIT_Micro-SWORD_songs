@@ -16,18 +16,12 @@ namespace PIW_assets.player_inventory
 
         public bool isShowing;
 
-        /// <summary>
-        /// Shows the inventory UI
-        /// </summary>
         public void Show()
         {
             isShowing = true;
             gameObject.SetActive(true);
         }
 
-        /// <summary>
-        /// Hides the inventory UI
-        /// </summary>
         public void Hide()
         {
             isShowing = false;

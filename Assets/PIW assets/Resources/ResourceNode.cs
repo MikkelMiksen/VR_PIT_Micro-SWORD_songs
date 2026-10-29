@@ -7,28 +7,23 @@ namespace PIW_assets.Resources
     /// </summary>
     public class ResourceNode : MonoBehaviour, Iinteractable
     {
-        [SerializeField] ResourceType resourceType = ResourceType.Wood;
-
+        [SerializeField] private ResourceType resourceType = ResourceType.Wood;
         [SerializeField] private int resourceAmount;
-
         [SerializeField] private bool shouldDestroyResourceOnCollection;
 
-        /// <summary>
-        /// Collects resource node from the pile and adds it to the player inventory.
-        /// </summary>
         public void Interact()
         {
-            MJ_PlayerInventory.Instance.AddResource(resourceType, resourceAmount);
+            if (MJ_PlayerInventory.Instance != null)
+            {
+                MJ_PlayerInventory.Instance.AddResource(resourceType, resourceAmount);
+            }
+
             if (shouldDestroyResourceOnCollection)
             {
                 Destroy(gameObject);
             }
         }
 
-        /// <summary>
-        /// Returns the prompt for the resource node pile.
-        /// </summary>
-        /// <returns>string</returns>
         public string GetPrompt() => "Press E to gather " + resourceType;
     }
 }

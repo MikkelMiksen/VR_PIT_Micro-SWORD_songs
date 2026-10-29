@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace PIW_assets.Crafting_system
 {
@@ -9,8 +9,6 @@ namespace PIW_assets.Crafting_system
 
         public virtual void Interact()
         {
-            // Opens the UI for this station
-            //CraftingUIController.Instance.OpenForStation(this);
         }
 
         public virtual string GetPrompt()

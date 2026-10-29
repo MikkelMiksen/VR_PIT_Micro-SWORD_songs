@@ -2,56 +2,40 @@ using System;
 using TMPro;
 using UnityEngine;
 
-[System.Serializable]
-public struct SeasonTemperature
-{
-    public string name;
-    public float avgHigh;
-    public float avgLow;
-}
-
 namespace PIW_assets.worldBehaviour
 {
+    [System.Serializable]
+    public struct SeasonTemperature
+    {
+        public string name;
+        public float avgHigh;
+        public float avgLow;
+    }
+
     public class DayNightCycle : MonoBehaviour
     {
-
         [Header("Read Temperature")] public float temp;
-
         public static DayNightCycle Instance;
 
-        void Awake()
-        {
-            Instance = this;
-        }
+        void Awake() => Instance = this;
 
-        [Header("Time attributes")] [SerializeField]
-        private float timeMultiplier, startHour, sunriseHour, sunsetHour, maxSunLightIntensity, maxMoonLightIntensity;
-
+        [Header("Time attributes")]
+        [SerializeField] private float timeMultiplier, startHour, sunriseHour, sunsetHour, maxSunLightIntensity, maxMoonLightIntensity;
         [SerializeField] private TextMeshProUGUI timeText;
-
         [SerializeField] private Light sunLight, moonLight;
-
         [SerializeField] private Color dayAmbientLight, nightAmbientLight;
-
         [SerializeField] private AnimationCurve lightChangeCurve;
 
         public DateTime currentTime;
-
         private TimeSpan sunriseTime, sunsetTime;
 
-        [Header("Temperature attributes")] [SerializeField]
-        private SeasonTemperature[] seasons;
-
+        [Header("Temperature attributes")]
+        [SerializeField] private SeasonTemperature[] seasons;
         [SerializeField] private float currentTemperature;
-        [SerializeField] private AnimationCurve dailyTemperatureCurve; // simulates warmest part of the day
+        [SerializeField] private AnimationCurve dailyTemperatureCurve;
         [SerializeField] private TextMeshProUGUI temperatureText;
-
         [SerializeField] private AnimationCurve yearlyTemperatureCurve;
 
-
-        /// <summary>
-        /// INIT system clock and time
-        /// </summary>
         void Start()
         {
             currentTime = DateTime.Now.AddYears(-71);
@@ -60,7 +44,6 @@ namespace PIW_assets.worldBehaviour
             sunsetTime = TimeSpan.FromHours(sunsetHour);
         }
 
-
         void Update()
         {
             UpdateTimeOfDay();
@@ -68,16 +51,12 @@ namespace PIW_assets.worldBehaviour
             UpdateLightSettings();
             UpdateTemperature();
 
-            temp = Mathf.Lerp(currentTemperature, Furnace.Instance.totalHeatOutput,
-                Furnace.Instance.temperatureInfluence);
+            temp = Mathf.Lerp(currentTemperature, Furnace.Instance.totalHeatOutput, Furnace.Instance.temperatureInfluence);
 
             if (temperatureText != null)
-                temperatureText.text = $"{temp:F1}°C" + " - " + GetCurrentSeason().name;
+                temperatureText.text = $"{temp:F1}°C - {GetCurrentSeason().name}";
         }
 
-        /// <summary>
-        /// Update the time of day
-        /// </summary>
         private void UpdateTimeOfDay()
         {
             currentTime = currentTime.AddSeconds(Time.deltaTime * timeMultiplier);
@@ -86,48 +65,27 @@ namespace PIW_assets.worldBehaviour
                 timeText.text = currentTime.ToString("d/M/yyyy-HH:mm");
         }
 
-        /// <summary>
-        /// Update the lighting based on the time used to calculate the new sun position
-        /// </summary>
         private void UpdateLightSettings()
         {
             float dotProduct = Vector3.Dot(sunLight.transform.forward, Vector3.down);
             sunLight.intensity = Mathf.Lerp(0, maxSunLightIntensity, lightChangeCurve.Evaluate(dotProduct));
             moonLight.intensity = Mathf.Lerp(maxMoonLightIntensity, 0, lightChangeCurve.Evaluate(dotProduct));
-            RenderSettings.ambientLight =
-                Color.Lerp(nightAmbientLight, dayAmbientLight, lightChangeCurve.Evaluate(dotProduct));
+            RenderSettings.ambientLight = Color.Lerp(nightAmbientLight, dayAmbientLight, lightChangeCurve.Evaluate(dotProduct));
         }
 
-        /// <summary>
-        /// Update the temperature based on the current time of day and season
-        /// </summary>
         private void UpdateTemperature()
         {
-            float yearPercent = GetYearProgress(); // 0–1 fraction of the year
-            float seasonBlend = yearlyTemperatureCurve.Evaluate(yearPercent); // 0–1 seasonal warmth factor
-
-            // Get general min/max possible temperatures across Alaska
-            float globalMin = -45f; // coldest winter
-            float globalMax = 27f; // hottest summer
-
-            // Use yearly curve to find a baseline average
+            float yearPercent = GetYearProgress();
+            float seasonBlend = yearlyTemperatureCurve.Evaluate(yearPercent);
+            float globalMin = -45f;
+            float globalMax = 27f;
             float seasonalAverage = Mathf.Lerp(globalMin, globalMax, seasonBlend);
-
-            // Daily variation (warmer in afternoon, cooler at night)
             float dayFraction = (float)(currentTime.TimeOfDay.TotalHours / 24f);
             float dailyFactor = dailyTemperatureCurve.Evaluate(dayFraction);
-
-            // Temperature fluctuates above/below the seasonal average
-            float dailyAmplitude = Mathf.Lerp(4f, 10f, seasonBlend); // smaller variation in winter, larger in summer
+            float dailyAmplitude = Mathf.Lerp(4f, 10f, seasonBlend);
             currentTemperature = seasonalAverage + (dailyFactor - 0.5f) * dailyAmplitude;
-
-            // Optional micro-noise
-            //currentTemperature += UnityEngine.Random.Range(-0.5f, 0.5f);
         }
 
-        /// <summary>
-        /// Rotate the sun based on the current time of day
-        /// </summary>
         private void RotateSun()
         {
             float sunLightRotation;
@@ -135,74 +93,42 @@ namespace PIW_assets.worldBehaviour
             {
                 TimeSpan sunriseToSunsetDuration = CalculateTimeDifference(sunriseTime, sunsetTime);
                 TimeSpan timeSinceSunrise = CalculateTimeDifference(sunriseTime, currentTime.TimeOfDay);
-
                 double percentage = timeSinceSunrise.TotalMinutes / sunriseToSunsetDuration.TotalMinutes;
-
                 sunLightRotation = Mathf.Lerp(0, 180, (float)percentage);
             }
             else
             {
                 TimeSpan sunsetToSunriseDuration = CalculateTimeDifference(sunsetTime, sunriseTime);
                 TimeSpan timeSinceSunset = CalculateTimeDifference(sunsetTime, currentTime.TimeOfDay);
-
                 double percentage = timeSinceSunset.TotalMinutes / sunsetToSunriseDuration.TotalMinutes;
-
                 sunLightRotation = Mathf.Lerp(180, 360, (float)percentage);
             }
 
             sunLight.transform.rotation = Quaternion.AngleAxis(sunLightRotation, Vector3.right);
         }
 
-        /// <summary>
-        /// Calculate the difference between two times.
-        /// </summary>
-        /// <param name="fromTime"></param>
-        /// <param name="toTime"></param>
-        /// <returns></returns>
         private TimeSpan CalculateTimeDifference(TimeSpan fromTime, TimeSpan toTime)
         {
             TimeSpan difference = toTime - fromTime;
-
             if (difference.TotalSeconds < 0)
-            {
                 difference += TimeSpan.FromHours(24);
-            }
-
             return difference;
         }
 
-        /// <summary>
-        /// Get the current season based on the current month
-        /// </summary>
-        /// <returns></returns>
         private SeasonTemperature GetCurrentSeason()
         {
             int month = currentTime.Month;
-
-            if (month >= 6 && month <= 8) // June–August
-                return seasons[0]; // Summer
-            if (month >= 9 && month <= 11) // Sept–Nov
-                return seasons[1]; // Fall
-            if (month == 12 || month <= 2) // Dec–Feb
-                return seasons[2]; // Winter
-            else
-                return seasons[3]; // Spring
+            if (month >= 6 && month <= 8) return seasons[0];
+            if (month >= 9 && month <= 11) return seasons[1];
+            if (month == 12 || month <= 2) return seasons[2];
+            return seasons[3];
         }
 
-        /// <summary>
-        /// Get the current year progress as a fraction of the year
-        /// </summary>
-        /// <returns></returns>
         private float GetYearProgress()
         {
             if (DateTime.IsLeapYear(currentTime.Year))
-            {
                 return (float)(currentTime.DayOfYear / 366f);
-            }
-            else
-            {
-                return (float)(currentTime.DayOfYear / 365f);
-            }
+            return (float)(currentTime.DayOfYear / 365f);
         }
     }
 }

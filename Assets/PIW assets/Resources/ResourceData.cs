@@ -1,45 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class ResourceData
+namespace PIW_assets.Resources
 {
-    /// <summary>
-    /// BurnInfo class stores burning properties of a resource.
-    /// </summary>
-    public class BurnInfo
+    public static class ResourceData
     {
-        public bool IsBurnable;
-        public float BurnTime;
-        public float BurnRate;
-        public float HeatOutput;
-    }
-
-    public static bool IsToolResource(ResourceType type)
-    {
-        switch (type)
+        public class BurnInfo
         {
-            case ResourceType.StoneAxe:
-            case ResourceType.StonePickaxe:
-            case ResourceType.Sword:
-            case ResourceType.Elucidator:
-            case ResourceType.DarkRepulser:
-            case ResourceType.LambentLight:
-                return true;
-            default:
-                return false;
+            public bool IsBurnable;
+            public float BurnTime;
+            public float BurnRate;
+            public float HeatOutput;
         }
-    }
 
-    /// <summary>
-    /// Burn properties of each resource.
-    /// </summary>
-    public static readonly Dictionary<ResourceType, BurnInfo> BurnProperties = new Dictionary<ResourceType, BurnInfo>
-    {
-        { ResourceType.Wood, new BurnInfo { IsBurnable = true, BurnTime = 5f, BurnRate = 1f, HeatOutput = 31f } },
-        { ResourceType.Coal, new BurnInfo { IsBurnable = true, BurnTime = 10f, BurnRate = .75f, HeatOutput = 36f } },
-        { ResourceType.Metal, new BurnInfo { IsBurnable = false, BurnTime = 0, BurnRate = 0, HeatOutput = 0 } },
-        { ResourceType.Stone, new BurnInfo { IsBurnable = false, BurnTime = 0, BurnRate = 0, HeatOutput = 0 } },
-        { ResourceType.Water, new BurnInfo { IsBurnable = false, BurnTime = 0, BurnRate = 0, HeatOutput = 0 } },
-        { ResourceType.Diesel, new BurnInfo { IsBurnable = true, BurnTime = 15f, BurnRate = .5f, HeatOutput = 45f } },
-    };
+        public static readonly Dictionary<ResourceType, BurnInfo> BurnProperties = new Dictionary<ResourceType, BurnInfo>
+        {
+            { ResourceType.Wood, new BurnInfo { IsBurnable = true, BurnTime = 5f, BurnRate = 1f, HeatOutput = 31f } },
+            { ResourceType.Coal, new BurnInfo { IsBurnable = true, BurnTime = 10f, BurnRate = .75f, HeatOutput = 36f } },
+            { ResourceType.Metal, new BurnInfo { IsBurnable = false, BurnTime = 0, BurnRate = 0, HeatOutput = 0 } },
+            { ResourceType.Stone, new BurnInfo { IsBurnable = false, BurnTime = 0, BurnRate = 0, HeatOutput = 0 } },
+            { ResourceType.Water, new BurnInfo { IsBurnable = false, BurnTime = 0, BurnRate = 0, HeatOutput = 0 } },
+            { ResourceType.Diesel, new BurnInfo { IsBurnable = true, BurnTime = 15f, BurnRate = .5f, HeatOutput = 45f } },
+        };
+    }
 }

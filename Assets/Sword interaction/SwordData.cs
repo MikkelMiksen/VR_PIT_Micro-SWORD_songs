@@ -1,15 +1,18 @@
 using UnityEngine;
 
-public class SwordData : ScriptableObject
+namespace PIW_assets.Sword_interaction
 {
-    public string swordName;
-    public ResourceType resourceType = ResourceType.Sword;
-    public GameObject prefab;
-    public float damage = 25f;
-    public float staminaCost = 20f;
-    public float knockbackForce = 4f;
+    [CreateAssetMenu(fileName = "NewSwordData", menuName = "SAO/Sword Data")]
+    public class SwordData : ScriptableObject
+    {
+        public string swordName;
+        public ResourceType resourceType = ResourceType.Sword;
+        public GameObject prefab;
+        public float damage = 25f;
+        public float staminaCost = 20f;
 
-    [Header("Visuals")]
-    public Sprite icon;
-    public Color themeColor = Color.cyan;
+        [Header("Visuals")]
+        public Sprite icon;
+        public Color themeColor = Color.cyan;
+    }
 }
