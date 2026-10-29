@@ -1,11 +1,11 @@
 {
   "dependencies": {
     "com.meta.xr.mrutilitykit": {
-      "version": "205.0.0",
+      "version": "207.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.meta.xr.sdk.core": "205.0.0",
+        "com.meta.xr.sdk.core": "207.0.1",
         "com.unity.textmeshpro": "3.0.6",
         "com.unity.ai.navigation": "1.1.4",
         "com.unity.nuget.newtonsoft-json": "3.0.2"
@@ -13,18 +13,18 @@
       "url": "https://packages.unity.com"
     },
     "com.meta.xr.sdk.all": {
-      "version": "205.0.0",
+      "version": "207.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.meta.xr.sdk.core": "205.0.0",
+        "com.meta.xr.sdk.core": "207.0.1",
         "com.meta.xr.sdk.audio": "85.0.0",
         "com.meta.xr.sdk.voice": "85.0.1",
-        "com.meta.xr.sdk.haptics": "205.0.0",
-        "com.meta.xr.mrutilitykit": "205.0.0",
-        "com.meta.xr.sdk.platform": "205.0.0",
-        "com.meta.xr.sdk.interaction": "205.0.0",
-        "com.meta.xr.sdk.interaction.ovr": "205.0.0"
+        "com.meta.xr.sdk.haptics": "207.0.1",
+        "com.meta.xr.mrutilitykit": "207.0.1",
+        "com.meta.xr.sdk.platform": "207.0.0",
+        "com.meta.xr.sdk.interaction": "207.0.1",
+        "com.meta.xr.sdk.interaction.ovr": "207.0.1"
       },
       "url": "https://packages.unity.com"
     },
@@ -36,8 +36,8 @@
       "url": "https://packages.unity.com"
     },
     "com.meta.xr.sdk.core": {
-      "version": "205.0.0",
-      "depth": 0,
+      "version": "207.0.1",
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.xr.hands": "1.7.2",
@@ -51,16 +51,16 @@
       "url": "https://packages.unity.com"
     },
     "com.meta.xr.sdk.haptics": {
-      "version": "205.0.0",
+      "version": "207.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.meta.xr.sdk.core": "205.0.0"
+        "com.meta.xr.sdk.core": "207.0.1"
       },
       "url": "https://packages.unity.com"
     },
     "com.meta.xr.sdk.interaction": {
-      "version": "205.0.0",
+      "version": "207.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -70,17 +70,17 @@
       "url": "https://packages.unity.com"
     },
     "com.meta.xr.sdk.interaction.ovr": {
-      "version": "205.0.0",
+      "version": "207.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.meta.xr.sdk.core": "205.0.0",
-        "com.meta.xr.sdk.interaction": "205.0.0"
+        "com.meta.xr.sdk.core": "207.0.1",
+        "com.meta.xr.sdk.interaction": "207.0.1"
       },
       "url": "https://packages.unity.com"
     },
     "com.meta.xr.sdk.platform": {
-      "version": "205.0.0",
+      "version": "207.0.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -174,12 +174,6 @@
       "source": "builtin",
       "dependencies": {}
     },
-    "com.unity.graph-authoring": {
-      "version": "1.0.0",
-      "depth": 2,
-      "source": "builtin",
-      "dependencies": {}
-    },
     "com.unity.ide.rider": {
       "version": "3.0.40",
       "depth": 0,
@@ -226,59 +220,6 @@
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
-    },
-    "com.unity.profiling.core": {
-      "version": "1.0.3",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.render-pipelines.core": {
-      "version": "17.6.0",
-      "depth": 1,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.burst": "1.8.14",
-        "com.unity.collections": "2.4.3",
-        "com.unity.modules.jsonserialize": "1.0.0",
-        "com.unity.profiling.core": "1.0.3"
-      }
-    },
-    "com.unity.render-pipelines.universal": {
-      "version": "17.6.0",
-      "depth": 0,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.render-pipelines.core": "17.6.0",
-        "com.unity.shadergraph": "17.6.0",
-        "com.unity.render-pipelines.universal-config": "17.6.0"
-      }
-    },
-    "com.unity.render-pipelines.universal-config": {
-      "version": "17.6.0",
-      "depth": 1,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.render-pipelines.core": "17.6.0"
-      }
-    },
-    "com.unity.searcher": {
-      "version": "4.9.5",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.shadergraph": {
-      "version": "17.6.0",
-      "depth": 1,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.render-pipelines.core": "17.6.0",
-        "com.unity.searcher": "4.9.3",
-        "com.unity.graph-authoring": "1.0.0"
-      }
     },
     "com.unity.test-framework": {
       "version": "1.8.0",
