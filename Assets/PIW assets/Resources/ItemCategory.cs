@@ -1,11 +1,14 @@
-/// <summary>
-/// Item category enum
-/// </summary>
-[System.Serializable]
-public enum ItemCategory
+namespace PIW_assets.Resources
 {
-    Material,
-    Tool,
-    Consumable,
-    Equipable,
+    /// <summary>
+    /// Item category enum
+    /// </summary>
+    [System.Serializable]
+    public enum ItemCategory
+    {
+        Material,
+        Tool,
+        Consumable,
+        Equipable,
+    }
 }

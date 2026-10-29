@@ -1,8 +1,5 @@
-﻿namespace PIW_assets.Crafting_system
+namespace PIW_assets.Crafting_system
 {
-    /// <summary>
-    /// Workstation types enum
-    /// </summary>
     [System.Serializable]
     public enum WorkstationType
     {
