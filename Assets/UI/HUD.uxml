@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <engine:UXML
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:engine="UnityEngine.UIElements"
@@ -14,7 +14,14 @@
                     <engine:VisualElement name="HealthBarFill" class="stat-bar-fill health-fill" />
                 </engine:VisualElement>
             </engine:VisualElement>
-            
+
+            <engine:VisualElement name="HungerBarContainer" class="stat-bar-container">
+                <engine:Label name="HungerLabel" text="100%" class="stat-label" />
+                <engine:VisualElement name="HungerBarBackground" class="stat-bar-bg">
+                    <engine:VisualElement name="HungerBarFill" class="stat-bar-fill hunger-fill" />
+                </engine:VisualElement>
+            </engine:VisualElement>
+
             <engine:VisualElement name="TempBarContainer" class="stat-bar-container">
                 <engine:Label name="TempLabel" text="37.0°C" class="stat-label" />
                 <engine:VisualElement name="TempBarBackground" class="stat-bar-bg">
@@ -22,7 +29,7 @@
                 </engine:VisualElement>
             </engine:VisualElement>
         </engine:VisualElement>
-        
+
         <engine:VisualElement name="TimePanel" class="time-panel">
             <engine:Label name="TimeLabel" text="00:00" class="time-label" />
         </engine:VisualElement>
