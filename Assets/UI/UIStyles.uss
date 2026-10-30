@@ -3,10 +3,17 @@
     padding: 20px;
     background-color: rgba(0, 0, 0, 0.4);
     border-radius: 10px;
+    width: 260px;
+}
+
+.stats-panel {
+    flex-direction: column;
+    gap: 8px;
 }
 
 .stat-bar-container {
-    margin-bottom: 10px;
+    margin-bottom: 6px;
+    flex-direction: column;
 }
 
 .stat-label {
@@ -30,6 +37,10 @@
 
 .health-fill {
     background-color: rgb(200, 50, 50);
+}
+
+.hunger-fill {
+    background-color: rgb(80, 180, 80);
 }
 
 .temp-fill {
