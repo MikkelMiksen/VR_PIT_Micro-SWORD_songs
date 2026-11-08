@@ -8,85 +8,48 @@ namespace PIW_assets.player_inventory
     {
         public static MJ_BodyTemp Instance;
 
-        void Awake()
-        {
-            Instance = this;
-        }
-
+        [Header("Body temperature")]
         public float bodyTemp = 37f;
         public float minSafeBodyTemp = 28f;
         public float maxSafeBodyTemp = 41f;
         public float temperatureChangeRate = 0.02f;
-        public float currentAreaTemp;
+        public float currentAreaTemp = 10f;
         public bool isBodyTempSafe, isBodyTempFreezing, isBodyTempOverheating;
         public float hpInfluenceCoefficient;
         public string readBodyTemp;
 
-        void Start()
-        {
-            currentAreaTemp = DayNightCycle.Instance.temp;
-        }
+        private void Awake() => Instance = this;
 
-        void Update()
+        private void Start()
         {
-            UpdateBodyTemperature();
+            if (DayNightCycle.Instance != null) currentAreaTemp = DayNightCycle.Instance.temp;
             CheckTemperatureEffects();
-            UpdateCurrentAreaTemp();
-            ApplyTemperatureDamage();
         }
 
-        private void ApplyTemperatureDamage()
+        private void Update()
         {
-            if (PlayerStats.Instance != null && !isBodyTempSafe)
-            {
-                float damage = 2f * Time.deltaTime;
-                PlayerStats.Instance.TakeDamage(damage);
-            }
-        }
-
-        private void UpdateCurrentAreaTemp()
-        {
-            if (DayNightCycle.Instance != null)
-            {
-                currentAreaTemp = DayNightCycle.Instance.temp;
-            }
-        }
-
-        private void UpdateBodyTemperature()
-        {
-            float environmentTemp = currentAreaTemp;
-            float delta = environmentTemp - bodyTemp;
+            if (DayNightCycle.Instance != null) currentAreaTemp = DayNightCycle.Instance.temp;
+            float localTemperature = CampfireHeatSource.GetLocalTemperature(transform.position, currentAreaTemp);
+            float delta = localTemperature - bodyTemp;
             float adjustment = Mathf.Sign(delta) * Mathf.Pow(Mathf.Abs(delta), 1.3f);
-            bodyTemp += adjustment * temperatureChangeRate * Time.deltaTime;
-            bodyTemp = Mathf.Clamp(bodyTemp, 19.8f, 45f);
+            bodyTemp = Mathf.Clamp(bodyTemp + adjustment * temperatureChangeRate * Time.deltaTime, 19.8f, 45f);
+            CheckTemperatureEffects();
+
+            if (PlayerStats.Instance != null && !isBodyTempSafe)
+                PlayerStats.Instance.TakeDamage(2f * Time.deltaTime);
         }
 
         private void CheckTemperatureEffects()
         {
-            if (bodyTemp >= minSafeBodyTemp && bodyTemp <= maxSafeBodyTemp)
-            {
-                readBodyTemp = $"Body temp: {bodyTemp:F1}°C";
-                isBodyTempSafe = true;
-                isBodyTempFreezing = false;
-                isBodyTempOverheating = false;
-                hpInfluenceCoefficient = 1;
-            }
-            else if (bodyTemp <= minSafeBodyTemp)
-            {
-                readBodyTemp = $"Hypothermia risk! Body temp: {bodyTemp:F1}°C";
-                isBodyTempSafe = false;
-                isBodyTempFreezing = true;
-                isBodyTempOverheating = false;
-                hpInfluenceCoefficient = 0.96f;
-            }
-            else if (bodyTemp >= maxSafeBodyTemp)
-            {
-                readBodyTemp = $"Overheating risk! Body temp: {bodyTemp:F1}°C";
-                isBodyTempSafe = false;
-                isBodyTempFreezing = false;
-                isBodyTempOverheating = true;
-                hpInfluenceCoefficient = 0.96f;
-            }
+            isBodyTempSafe = bodyTemp > minSafeBodyTemp && bodyTemp < maxSafeBodyTemp;
+            isBodyTempFreezing = bodyTemp <= minSafeBodyTemp;
+            isBodyTempOverheating = bodyTemp >= maxSafeBodyTemp;
+            hpInfluenceCoefficient = isBodyTempSafe ? 1f : 0.96f;
+            readBodyTemp = isBodyTempFreezing
+                ? $"Hypothermia risk! Body temp: {bodyTemp:F1}°C"
+                : isBodyTempOverheating
+                    ? $"Overheating risk! Body temp: {bodyTemp:F1}°C"
+                    : $"Body temp: {bodyTemp:F1}°C";
         }
     }
 }

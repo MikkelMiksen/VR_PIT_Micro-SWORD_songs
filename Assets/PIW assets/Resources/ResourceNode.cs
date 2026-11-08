@@ -3,28 +3,22 @@ using PIW_assets.player_inventory;
 
 namespace PIW_assets.Resources
 {
-    /// <summary>
-    /// Use this class to make any object in the scene a resource node.
-    /// </summary>
+    /// <summary>World object that adds its configured resources when selected through VR interaction.</summary>
     public class ResourceNode : MonoBehaviour, Iinteractable
     {
         [SerializeField] private ResourceType resourceType = ResourceType.Wood;
-        [SerializeField] private int resourceAmount;
-        [SerializeField] private bool shouldDestroyResourceOnCollection;
+        [SerializeField, Min(1)] private int resourceAmount = 1;
+        [SerializeField] private bool shouldDestroyResourceOnCollection = true;
+        private bool collected;
 
         public void Interact()
         {
-            if (MJ_PlayerInventory.Instance != null)
-            {
-                MJ_PlayerInventory.Instance.AddResource(resourceType, resourceAmount);
-            }
-
-            if (shouldDestroyResourceOnCollection)
-            {
-                Destroy(gameObject);
-            }
+            if (collected || MJ_PlayerInventory.Instance == null || resourceAmount <= 0) return;
+            MJ_PlayerInventory.Instance.AddResource(resourceType, resourceAmount);
+            collected = true;
+            if (shouldDestroyResourceOnCollection) Destroy(gameObject);
         }
 
-        public string GetPrompt() => "Press E to gather " + resourceType;
+        public string GetPrompt() => $"Select to gather {resourceType}";
     }
 }
