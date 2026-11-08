@@ -8,11 +8,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-/// <summary>Updates the survival HUD and optional inventory UIDocuments.</summary>
+/// <summary>Updates HUD and inventory UI Toolkit trees rendered by Unity 6.6 PanelRenderer.</summary>
 public sealed class SurvivalSliceUIController : MonoBehaviour
 {
-    [SerializeField] private UIDocument hudDocument;
-    [SerializeField] private UIDocument inventoryDocument;
+    [SerializeField] private PanelRenderer hudPanelRenderer;
+    [SerializeField] private PanelRenderer inventoryPanelRenderer;
     [SerializeField] private InputActionProperty toggleInventoryAction;
     [SerializeField, Min(0.05f)] private float refreshInterval = 0.15f;
 
@@ -22,50 +22,53 @@ public sealed class SurvivalSliceUIController : MonoBehaviour
     private float refreshTimer;
     private bool inventoryVisible;
 
-    private void Awake()
-    {
-        if (hudDocument != null)
-        {
-            VisualElement root = hudDocument.rootVisualElement;
-            healthFill = root.Q<VisualElement>("HealthBarFill");
-            hungerFill = root.Q<VisualElement>("HungerBarFill");
-            temperatureFill = root.Q<VisualElement>("TempBarFill");
-            healthLabel = root.Q<Label>("HealthLabel");
-            hungerLabel = root.Q<Label>("HungerLabel");
-            temperatureLabel = root.Q<Label>("TempLabel");
-            timeLabel = root.Q<Label>("TimeLabel");
-            resultLabel = root.Q<Label>("ResultLabel");
-        }
-
-        if (inventoryDocument != null)
-        {
-            inventoryRoot = inventoryDocument.rootVisualElement.Q<VisualElement>("InventoryContainer");
-            slotGrid = inventoryDocument.rootVisualElement.Q<VisualElement>("SlotGrid");
-            closeButton = inventoryDocument.rootVisualElement.Q<Button>("CloseButton");
-            if (closeButton != null) closeButton.clicked += HideInventory;
-            HideInventory();
-        }
-
-        Refresh();
-    }
-
     private void OnEnable()
     {
-        if (toggleInventoryAction.action == null) return;
-        toggleInventoryAction.action.performed += OnToggleInventory;
-        toggleInventoryAction.action.Enable();
+        if (hudPanelRenderer != null) hudPanelRenderer.RegisterUIReloadCallback(OnHudReload);
+        if (inventoryPanelRenderer != null) inventoryPanelRenderer.RegisterUIReloadCallback(OnInventoryReload);
+        if (toggleInventoryAction.action != null)
+        {
+            toggleInventoryAction.action.performed += OnToggleInventory;
+            toggleInventoryAction.action.Enable();
+        }
     }
 
     private void OnDisable()
     {
-        if (toggleInventoryAction.action == null) return;
-        toggleInventoryAction.action.performed -= OnToggleInventory;
-        toggleInventoryAction.action.Disable();
+        if (hudPanelRenderer != null) hudPanelRenderer.UnregisterUIReloadCallback(OnHudReload);
+        if (inventoryPanelRenderer != null) inventoryPanelRenderer.UnregisterUIReloadCallback(OnInventoryReload);
+        if (toggleInventoryAction.action != null)
+        {
+            toggleInventoryAction.action.performed -= OnToggleInventory;
+            toggleInventoryAction.action.Disable();
+        }
+        if (closeButton != null) closeButton.clicked -= HideInventory;
     }
 
-    private void OnDestroy()
+    private void OnHudReload(PanelRenderer renderer, VisualElement root, int version)
     {
-        if (closeButton != null) closeButton.clicked -= HideInventory;
+        healthFill = root.Q<VisualElement>("HealthBarFill");
+        hungerFill = root.Q<VisualElement>("HungerBarFill");
+        temperatureFill = root.Q<VisualElement>("TempBarFill");
+        healthLabel = root.Q<Label>("HealthLabel");
+        hungerLabel = root.Q<Label>("HungerLabel");
+        temperatureLabel = root.Q<Label>("TempLabel");
+        timeLabel = root.Q<Label>("TimeLabel");
+        resultLabel = root.Q<Label>("ResultLabel");
+        Refresh();
+    }
+
+    private void OnInventoryReload(PanelRenderer renderer, VisualElement root, int version)
+    {
+        inventoryRoot = root.Q<VisualElement>("InventoryContainer");
+        slotGrid = root.Q<VisualElement>("SlotGrid");
+        closeButton = root.Q<Button>("CloseButton");
+        if (closeButton != null)
+        {
+            closeButton.clicked -= HideInventory;
+            closeButton.clicked += HideInventory;
+        }
+        HideInventory();
     }
 
     private void Update()

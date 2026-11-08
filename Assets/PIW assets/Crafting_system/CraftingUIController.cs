@@ -9,9 +9,10 @@ namespace PIW_assets.Crafting_system
     {
         public static CraftingUIController Instance { get; private set; }
 
-        [SerializeField] private UIDocument _uiDocument;
+        [SerializeField] private PanelRenderer panelRenderer;
 
         private VisualElement _root;
+        private VisualElement _craftingPanel;
         private DropdownField _recipeDropdown;
         private Label _ingredientsLabel;
         private Button _craftButton;
@@ -24,66 +25,69 @@ namespace PIW_assets.Crafting_system
 
         private void Awake()
         {
-            if (Instance == null)
-                Instance = this;
+            if (Instance == null) Instance = this;
             else
             {
                 Destroy(gameObject);
                 return;
             }
-
-            if (_uiDocument == null)
-                _uiDocument = GetComponent<UIDocument>();
-
-            if (_uiDocument != null)
-            {
-                _root = _uiDocument.rootVisualElement;
-                InitializeUI();
-                HideUI();
-            }
+            if (panelRenderer == null) panelRenderer = GetComponent<PanelRenderer>();
         }
 
-        private void InitializeUI()
+        private void OnEnable()
         {
-            _titleLabel = _root.Q<Label>("TitleLabel");
-            _recipeDropdown = _root.Q<DropdownField>("RecipeDropdown");
-            _ingredientsLabel = _root.Q<Label>("IngredientsLabel");
-            _craftButton = _root.Q<Button>("CraftButton");
-            _closeButton = _root.Q<Button>("CloseButton");
+            if (panelRenderer != null) panelRenderer.RegisterUIReloadCallback(OnUIReload);
+        }
 
-            _recipeDropdown.RegisterValueChangedCallback(evt => OnRecipeSelected(evt.newValue));
-            _craftButton.clicked += OnCraftClicked;
-            _closeButton.clicked += HideUI;
+        private void OnDisable()
+        {
+            if (panelRenderer != null) panelRenderer.UnregisterUIReloadCallback(OnUIReload);
+            if (_craftButton != null) _craftButton.clicked -= OnCraftClicked;
+            if (_closeButton != null) _closeButton.clicked -= HideUI;
+        }
+
+        private void OnUIReload(PanelRenderer renderer, VisualElement root, int version)
+        {
+            _root = root;
+            _craftingPanel = root.Q<VisualElement>("CraftingPanel");
+            _titleLabel = root.Q<Label>("TitleLabel");
+            _recipeDropdown = root.Q<DropdownField>("RecipeDropdown");
+            _ingredientsLabel = root.Q<Label>("IngredientsLabel");
+            _craftButton = root.Q<Button>("CraftButton");
+            _closeButton = root.Q<Button>("CloseButton");
+
+            if (_recipeDropdown != null)
+                _recipeDropdown.RegisterValueChangedCallback(evt => OnRecipeSelected(evt.newValue));
+            if (_craftButton != null) _craftButton.clicked += OnCraftClicked;
+            if (_closeButton != null) _closeButton.clicked += HideUI;
+            HideUI();
         }
 
         public void ShowUI(CraftingStation station, List<RecipeSO> recipes)
         {
+            if (_craftingPanel == null || station == null || recipes == null) return;
             _currentStation = station;
             _currentRecipes = recipes;
 
-            if (_titleLabel != null)
-                _titleLabel.text = station.StationName;
+            if (_titleLabel != null) _titleLabel.text = station.StationName;
+            if (_recipeDropdown != null) _recipeDropdown.choices = recipes.Select(r => r.recipeName).ToList();
 
-            _recipeDropdown.choices = recipes.Select(r => r.recipeName).ToList();
-
-            if (recipes.Count > 0)
+            if (recipes.Count > 0 && _recipeDropdown != null)
             {
                 _recipeDropdown.value = recipes[0].recipeName;
                 OnRecipeSelected(recipes[0].recipeName);
             }
-
-            gameObject.SetActive(true);
-            if (_uiDocument != null) _uiDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+            _craftingPanel.style.display = DisplayStyle.Flex;
         }
 
         public void HideUI()
         {
-            if (_uiDocument != null) _uiDocument.rootVisualElement.style.display = DisplayStyle.None;
-            gameObject.SetActive(false);
+            if (_craftingPanel != null) _craftingPanel.style.display = DisplayStyle.None;
         }
 
         private void OnRecipeSelected(string recipeName)
         {
+            if (_currentRecipes == null) return;
             _selectedRecipe = _currentRecipes.FirstOrDefault(r => r.recipeName == recipeName);
             UpdateIngredientsDisplay();
         }
