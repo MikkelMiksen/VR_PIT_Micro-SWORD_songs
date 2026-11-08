@@ -255,6 +255,96 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68d32fbcb9062b848a1b749648471dcb, type: 3}
+--- !u!1 &306553590
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 306553592}
+  - component: {fileID: 306553591}
+  m_Layer: 5
+  m_Name: UI_Inventory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1931382934 &306553591
+PanelRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306553590}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  serializedVersion: 1
+  m_PanelSettings: {fileID: 11400000, guid: 88a97ff9d799a2d4aa08221f42f04a6d, type: 2}
+  sourceAsset: {fileID: 9197481963319205126, guid: d0085c6f0aae2ac4fbf5cc4730921dad, type: 3}
+  m_ParentUI: {fileID: 0}
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_Position: 0
+--- !u!4 &306553592
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306553590}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &321069624
 GameObject:
   m_ObjectHideFlags: 0
@@ -634,7 +724,7 @@ GameObject:
   - component: {fileID: 686157476}
   - component: {fileID: 686157475}
   m_Layer: 0
-  m_Name: Survival UI
+  m_Name: Survival UI_HUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -690,7 +780,7 @@ PanelRenderer:
   m_MaskInteraction: 0
   serializedVersion: 1
   m_PanelSettings: {fileID: 11400000, guid: 88a97ff9d799a2d4aa08221f42f04a6d, type: 2}
-  sourceAsset: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 8b023c5682afe384d96b90f3a674e367, type: 3}
   m_ParentUI: {fileID: 0}
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
@@ -1297,6 +1387,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1061749151}
   - component: {fileID: 1061749150}
+  - component: {fileID: 1061749152}
   m_Layer: 0
   m_Name: Game Systems
   m_TagString: Untagged
@@ -1332,6 +1423,42 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1061749152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061749149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d7615f4a043c4f4b8d03910ec16bb0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurvivalSliceUIController
+  hudPanelRenderer: {fileID: 686157475}
+  inventoryPanelRenderer: {fileID: 306553591}
+  toggleInventoryAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Toggle Inventory
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: c3de76cd-ce22-4e09-9b2d-5733bc14b7c0
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 3e7769ba-020e-4589-9070-0c2592379ce4
+        m_Path: <XRController>{LeftHand}/{SecondaryButton}
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Toggle Inventory
+        m_Flags: 0
+      m_Flags: 0
+      m_Priority: 0
+    m_Reference: {fileID: 0}
+  refreshInterval: 0.15
 --- !u!1 &1072231223
 GameObject:
   m_ObjectHideFlags: 0
@@ -1574,14 +1701,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a96a2e90902d4abdbb3a7cde9e182c6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceSpawner
-  _woodPilePrefab: {fileID: 0}
-  _coalPilePrefab: {fileID: 0}
+  _woodPilePrefab: {fileID: 6512057794726391888, guid: 0720d93a0a761e9419277d6ccb07a65c, type: 3}
+  _coalPilePrefab: {fileID: 3275140998102105512, guid: 54245e1d5e1a1ff4a9251ff1ac5f163b, type: 3}
   _woodCount: 50
   _coalCount: 30
   _spawnRadius: 200
   _groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
 --- !u!1 &1581785717
 GameObject:
   m_ObjectHideFlags: 0
@@ -2137,7 +2264,7 @@ MonoBehaviour:
   requestBodyTrackingPermissionOnStartup: 0
   requestFaceTrackingPermissionOnStartup: 0
   requestEyeTrackingPermissionOnStartup: 0
-  requestScenePermissionOnStartup: 0
+  requestScenePermissionOnStartup: 1
   requestRecordAudioPermissionOnStartup: 0
   requestPassthroughCameraAccessPermissionOnStartup: 0
   _localDimming: 1
@@ -2557,3 +2684,4 @@ SceneRoots:
   - {fileID: 8000937679118922935}
   - {fileID: 1061749151}
   - {fileID: 686157476}
+  - {fileID: 306553592}
